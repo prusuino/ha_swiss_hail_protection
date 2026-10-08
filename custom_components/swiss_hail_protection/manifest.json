@@ -1,12 +1,12 @@
 {
   "domain": "swiss_hail_protection",
-  "name": "Swiss Hail Protection (VKF)",
+  "name": "Swiss Hail Protection (VKF / MeteoSwiss)",
   "codeowners": ["@prusuino"],
   "config_flow": true,
   "documentation": "https://github.com/prusuino/ha_swiss_hail_protection",
   "integration_type": "service",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/prusuino/ha_swiss_hail_protection/issues",
-  "requirements": [],
-  "version": "1.0.0"
+  "requirements": ["pyfive==1.2.1"],
+  "version": "1.1.0"
 }

@@ -2,8 +2,16 @@
   "config": {
     "step": {
       "user": {
-        "title": "Swiss Hail Protection (VKF)",
-        "description": "Collega Home Assistant al sistema di allarme grandine dell'AICAA/VKF «Protezione antigrandine – semplicemente automatica». Serve un dispositivo registrato presso l'AICAA: il numero di serie (deviceId) e l'identificativo dell'interfaccia (hwtypeId) riportati nei documenti di registrazione o nel tuo account su meteo.netitservices.com. Il servizio viene interrogato una volta per verificare entrambi i valori.",
+        "title": "Swiss Hail Protection",
+        "description": "Scegli da dove proviene il segnale grandine. Il segnale AICAA/VKF richiede un dispositivo registrato presso gli istituti cantonali di assicurazione e avvisa circa 20 minuti prima; il radar grandine di MeteoSvizzera è open data per qualsiasi località in Svizzera e mostra dove sta grandinando adesso.",
+        "menu_options": {
+          "vkf": "Segnale di allarme grandine AICAA/VKF (dispositivo registrato)",
+          "meteoswiss": "Radar grandine MeteoSvizzera (open data, qualsiasi località)"
+        }
+      },
+      "vkf": {
+        "title": "Segnale di allarme grandine AICAA/VKF",
+        "description": "Si collega al servizio AICAA/VKF «Protezione antigrandine – semplicemente automatica». Serve un dispositivo registrato presso l'AICAA: il numero di serie (deviceId) e l'identificativo dell'interfaccia (hwtypeId) riportati nei documenti di registrazione o nel tuo account su meteo.netitservices.com. Il servizio viene interrogato una volta per verificare entrambi i valori.",
         "data": {
           "device_id": "Numero di serie del dispositivo (deviceId)",
           "hwtype_id": "Identificativo interfaccia (hwtypeId)"
@@ -11,6 +19,20 @@
         "data_description": {
           "device_id": "12 caratteri, lettere e cifre – l'indirizzo MAC di una signalbox VKF oppure l'identificativo rilasciato per il tuo sistema di gestione dell'edificio.",
           "hwtype_id": "Numero intero indicato sulla scheda interfaccia AICAA/VKF."
+        }
+      },
+      "meteoswiss": {
+        "title": "Radar grandine MeteoSvizzera",
+        "description": "Valuta i prodotti radar grandine di MeteoSvizzera (probabilità di grandine e dimensione attesa dei chicchi, griglia di 1 km, ogni 5 minuti) attorno a una località. Latitudine e longitudine corrispondono per impostazione predefinita alla posizione di casa di Home Assistant e non lasciano mai la tua istanza: un unico file copre tutta la Svizzera. L'allarme si attiva quando la probabilità di grandine nel raggio raggiunge la soglia.",
+        "data": {
+          "latitude": "Latitudine",
+          "longitude": "Longitudine",
+          "radius_km": "Raggio (km)",
+          "poh_threshold": "Soglia di allarme: probabilità di grandine"
+        },
+        "data_description": {
+          "radius_km": "Grandine entro questa distanza dalla località attiva l'allarme. Un raggio maggiore dà più preavviso ma più falsi allarmi da celle che passano accanto.",
+          "poh_threshold": "Probabilità di grandine (POH) a partire dalla quale una cella radar conta come grandine. 80 % è un buon punto di partenza."
         }
       },
       "reauth_confirm": {
@@ -28,19 +50,34 @@
           "device_id": "Numero di serie del dispositivo (deviceId)",
           "hwtype_id": "Identificativo interfaccia (hwtypeId)"
         }
+      },
+      "reconfigure_meteoswiss": {
+        "title": "Modifica località o soglie",
+        "description": "Modifica la località, il raggio o la soglia di allarme. L'ultimo prodotto radar viene scaricato una volta per verificare la località.",
+        "data": {
+          "latitude": "Latitudine",
+          "longitude": "Longitudine",
+          "radius_km": "Raggio (km)",
+          "poh_threshold": "Soglia di allarme: probabilità di grandine"
+        }
       }
     },
     "error": {
-      "cannot_connect": "Il sistema di allarme grandine non è raggiungibile. Controlla la connessione Internet e riprova.",
+      "cannot_connect": "Il servizio dati non è raggiungibile. Controlla la connessione Internet e riprova.",
       "device_not_found": "Il servizio non conosce questa combinazione di numero di serie e identificativo interfaccia. Verifica entrambi i valori nella tua registrazione AICAA/VKF.",
       "invalid_device_id": "Inserisci il numero di serie usando solo lettere e cifre.",
       "too_many_polls": "Il servizio ha rifiutato la richiesta: la quota giornaliera di interrogazioni di questo dispositivo è esaurita. Riprova più tardi.",
+      "invalid_latitude": "Inserisci una latitudine tra -90 e 90.",
+      "invalid_longitude": "Inserisci una longitudine tra -180 e 180.",
+      "invalid_radius": "Inserisci un raggio tra 1 e 50 km.",
+      "outside_coverage": "Questa località si trova fuori dal composito radar svizzero. Il radar grandine copre la Svizzera e le immediate vicinanze.",
+      "no_data": "MeteoSvizzera non ha pubblicato alcun prodotto grandine negli ultimi 20 minuti. Riprova tra qualche minuto.",
       "unknown": "Il servizio ha restituito una risposta inattesa. Controlla il registro di Home Assistant e riprova."
     },
     "abort": {
-      "already_configured": "Questo numero di serie è già configurato.",
+      "already_configured": "Questo dispositivo o questa località è già configurato.",
       "reauth_successful": "Il dispositivo è stato aggiornato e l'integrazione ricaricata.",
-      "reconfigure_successful": "Il dispositivo è stato aggiornato e l'integrazione ricaricata."
+      "reconfigure_successful": "La voce è stata aggiornata e l'integrazione ricaricata."
     }
   },
   "entity": {
@@ -49,7 +86,8 @@
         "state": {
           "no_hail": "Nessun allarme grandine",
           "hail": "Allarme grandine",
-          "test_alarm": "Allarme di prova"
+          "test_alarm": "Allarme di prova",
+          "off_season": "Fuori stagione (da ottobre a marzo)"
         }
       }
     }

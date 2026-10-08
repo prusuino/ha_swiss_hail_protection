@@ -1,8 +1,8 @@
 """Minimal client for the VKF hail-warning REST API.
 
-One documented call: GET <API_BASE_URL>/<deviceId>/poll?hwtypeId=<n>, which
-answers {"currentState": 0|1|2}. Errors come back as an HTTP error status with
-a JSON body {"exception": "<Name>", "message": "<text>"}.
+One documented call: GET <VKF_API_BASE_URL>/<deviceId>/poll?hwtypeId=<n>,
+which answers {"currentState": 0|1|2}. Errors come back as an HTTP error
+status with a JSON body {"exception": "<Name>", "message": "<text>"}.
 
 Nothing here ever puts the request URL into an exception message: the URL
 carries the device serial, which is the only credential of the service and
@@ -14,7 +14,7 @@ from typing import Any
 
 import aiohttp
 
-from .const import API_BASE_URL, REQUEST_TIMEOUT_SECONDS
+from .const import VKF_API_BASE_URL, VKF_REQUEST_TIMEOUT_SECONDS
 
 
 class HailApiError(Exception):
@@ -58,12 +58,12 @@ async def async_poll_state(
     Raises one of the HailApiError subclasses on any failure. Values outside
     0..2 are returned as they are; the caller decides how to treat them.
     """
-    url = f"{API_BASE_URL}/{device_id}/poll"
+    url = f"{VKF_API_BASE_URL}/{device_id}/poll"
     try:
         async with session.get(
             url,
             params={"hwtypeId": hwtype_id},
-            timeout=aiohttp.ClientTimeout(total=REQUEST_TIMEOUT_SECONDS),
+            timeout=aiohttp.ClientTimeout(total=VKF_REQUEST_TIMEOUT_SECONDS),
         ) as resp:
             if resp.status >= 400:
                 payload = await _read_json(resp)

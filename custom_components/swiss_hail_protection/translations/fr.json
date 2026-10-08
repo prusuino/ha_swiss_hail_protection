@@ -2,8 +2,16 @@
   "config": {
     "step": {
       "user": {
-        "title": "Swiss Hail Protection (VKF)",
-        "description": "Connecte Home Assistant au système d'alerte grêle de l'AEAI/VKF « Protection contre la grêle – tout simplement automatique ». Il faut un appareil enregistré auprès de l'AEAI : le numéro de série (deviceId) et l'identifiant d'interface (hwtypeId) figurant dans les documents d'enregistrement ou dans votre compte sur meteo.netitservices.com. Le service est interrogé une fois pour vérifier les deux valeurs.",
+        "title": "Swiss Hail Protection",
+        "description": "Choisissez d'où provient le signal grêle. Le signal AEAI/VKF nécessite un appareil enregistré auprès des établissements cantonaux d'assurance et prévient environ 20 minutes à l'avance ; le radar grêle de MétéoSuisse est en open data pour tout lieu en Suisse et montre où il grêle en ce moment.",
+        "menu_options": {
+          "vkf": "Signal d'alerte grêle AEAI/VKF (appareil enregistré)",
+          "meteoswiss": "Radar grêle MétéoSuisse (open data, tout lieu)"
+        }
+      },
+      "vkf": {
+        "title": "Signal d'alerte grêle AEAI/VKF",
+        "description": "Se connecte au service AEAI/VKF « Protection contre la grêle – tout simplement automatique ». Il faut un appareil enregistré auprès de l'AEAI : le numéro de série (deviceId) et l'identifiant d'interface (hwtypeId) figurant dans les documents d'enregistrement ou dans votre compte sur meteo.netitservices.com. Le service est interrogé une fois pour vérifier les deux valeurs.",
         "data": {
           "device_id": "Numéro de série de l'appareil (deviceId)",
           "hwtype_id": "Identifiant d'interface (hwtypeId)"
@@ -11,6 +19,20 @@
         "data_description": {
           "device_id": "12 caractères, lettres et chiffres – l'adresse MAC d'une box de signalisation VKF ou l'identifiant délivré pour votre gestion technique du bâtiment.",
           "hwtype_id": "Nombre entier indiqué sur votre fiche d'interface AEAI/VKF."
+        }
+      },
+      "meteoswiss": {
+        "title": "Radar grêle MétéoSuisse",
+        "description": "Évalue les produits radar grêle de MétéoSuisse (probabilité de grêle et taille attendue des grêlons, grille de 1 km, toutes les 5 minutes) autour d'un lieu. La latitude et la longitude correspondent par défaut au domicile Home Assistant et ne quittent jamais votre instance : un seul fichier couvre toute la Suisse. L'alarme s'active lorsque la probabilité de grêle dans le rayon atteint le seuil.",
+        "data": {
+          "latitude": "Latitude",
+          "longitude": "Longitude",
+          "radius_km": "Rayon (km)",
+          "poh_threshold": "Seuil d'alarme : probabilité de grêle"
+        },
+        "data_description": {
+          "radius_km": "De la grêle à cette distance du lieu déclenche l'alarme. Un rayon plus grand donne plus d'avance mais plus de fausses alertes dues aux cellules qui passent à côté.",
+          "poh_threshold": "Probabilité de grêle (POH) à partir de laquelle une cellule radar compte comme grêle. 80 % est un bon point de départ."
         }
       },
       "reauth_confirm": {
@@ -28,19 +50,34 @@
           "device_id": "Numéro de série de l'appareil (deviceId)",
           "hwtype_id": "Identifiant d'interface (hwtypeId)"
         }
+      },
+      "reconfigure_meteoswiss": {
+        "title": "Modifier le lieu ou les seuils",
+        "description": "Modifie le lieu, le rayon ou le seuil d'alarme. Le dernier produit radar est téléchargé une fois pour vérifier le lieu.",
+        "data": {
+          "latitude": "Latitude",
+          "longitude": "Longitude",
+          "radius_km": "Rayon (km)",
+          "poh_threshold": "Seuil d'alarme : probabilité de grêle"
+        }
       }
     },
     "error": {
-      "cannot_connect": "Le système d'alerte grêle est injoignable. Vérifiez la connexion Internet et réessayez.",
+      "cannot_connect": "Le service de données est injoignable. Vérifiez la connexion Internet et réessayez.",
       "device_not_found": "Le service ne connaît pas cette combinaison numéro de série / identifiant d'interface. Vérifiez les deux valeurs dans votre enregistrement AEAI/VKF.",
       "invalid_device_id": "Saisissez le numéro de série uniquement avec des lettres et des chiffres.",
       "too_many_polls": "Le service a refusé la requête : le quota d'interrogations journalier de cet appareil est épuisé. Réessayez plus tard.",
+      "invalid_latitude": "Saisissez une latitude entre -90 et 90.",
+      "invalid_longitude": "Saisissez une longitude entre -180 et 180.",
+      "invalid_radius": "Saisissez un rayon entre 1 et 50 km.",
+      "outside_coverage": "Ce lieu se trouve hors du composite radar suisse. Le radar grêle couvre la Suisse et ses environs immédiats.",
+      "no_data": "MétéoSuisse n'a publié aucun produit grêle au cours des 20 dernières minutes. Réessayez dans quelques minutes.",
       "unknown": "Le service a renvoyé une réponse inattendue. Consultez le journal de Home Assistant et réessayez."
     },
     "abort": {
-      "already_configured": "Ce numéro de série est déjà configuré.",
+      "already_configured": "Cet appareil ou ce lieu est déjà configuré.",
       "reauth_successful": "L'appareil a été mis à jour et l'intégration rechargée.",
-      "reconfigure_successful": "L'appareil a été mis à jour et l'intégration rechargée."
+      "reconfigure_successful": "L'entrée a été mise à jour et l'intégration rechargée."
     }
   },
   "entity": {
@@ -49,7 +86,8 @@
         "state": {
           "no_hail": "Pas d'alerte grêle",
           "hail": "Alerte grêle",
-          "test_alarm": "Alarme de test"
+          "test_alarm": "Alarme de test",
+          "off_season": "Hors saison (octobre à mars)"
         }
       }
     }

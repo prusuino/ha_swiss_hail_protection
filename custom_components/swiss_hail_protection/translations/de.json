@@ -2,8 +2,16 @@
   "config": {
     "step": {
       "user": {
-        "title": "Swiss Hail Protection (VKF)",
-        "description": "Verbindet Home Assistant mit dem VKF-Hagelwarnsystem «Hagelschutz – einfach automatisch». Du brauchst ein bei der VKF registriertes Gerät: die Geräte-Seriennummer (deviceId) und die Schnittstellen-ID (hwtypeId) aus den Registrierungsunterlagen oder deinem Konto auf meteo.netitservices.com. Der Dienst wird einmal abgefragt, um beide Werte zu prüfen.",
+        "title": "Swiss Hail Protection",
+        "description": "Wähle, woher das Hagelsignal kommt. Das VKF-Signal braucht ein bei den kantonalen Gebäudeversicherungen registriertes Gerät und warnt rund 20 Minuten im Voraus; das MeteoSchweiz-Hagelradar ist Open Data für jeden Standort in der Schweiz und zeigt, wo gerade Hagel ist.",
+        "menu_options": {
+          "vkf": "VKF-Hagelwarnsignal (registriertes Gerät)",
+          "meteoswiss": "MeteoSchweiz-Hagelradar (Open Data, beliebiger Standort)"
+        }
+      },
+      "vkf": {
+        "title": "VKF-Hagelwarnsignal",
+        "description": "Verbindet mit dem VKF-Dienst «Hagelschutz – einfach automatisch». Du brauchst ein bei der VKF registriertes Gerät: die Geräte-Seriennummer (deviceId) und die Schnittstellen-ID (hwtypeId) aus den Registrierungsunterlagen oder deinem Konto auf meteo.netitservices.com. Der Dienst wird einmal abgefragt, um beide Werte zu prüfen.",
         "data": {
           "device_id": "Geräte-Seriennummer (deviceId)",
           "hwtype_id": "Schnittstellen-ID (hwtypeId)"
@@ -11,6 +19,20 @@
         "data_description": {
           "device_id": "12 Zeichen, Buchstaben und Ziffern – die MAC-Adresse einer VKF-Signalbox oder die für deine Gebäudesteuerung ausgestellte Kennung.",
           "hwtype_id": "Ganze Zahl gemäss deinem VKF-Schnittstellenblatt."
+        }
+      },
+      "meteoswiss": {
+        "title": "MeteoSchweiz-Hagelradar",
+        "description": "Wertet die Hagel-Radarprodukte von MeteoSchweiz (Hagelwahrscheinlichkeit und erwartete Korngrösse, 1-km-Raster, alle 5 Minuten) rund um einen Standort aus. Breiten-/Längengrad sind standardmässig der Home-Assistant-Heimatstandort und verlassen deine Instanz nie: eine Datei deckt die ganze Schweiz ab. Der Alarm schaltet ein, wenn die Hagelwahrscheinlichkeit im Umkreis die Schwelle erreicht.",
+        "data": {
+          "latitude": "Breitengrad",
+          "longitude": "Längengrad",
+          "radius_km": "Umkreis (km)",
+          "poh_threshold": "Alarmschwelle: Hagelwahrscheinlichkeit"
+        },
+        "data_description": {
+          "radius_km": "Hagel innerhalb dieser Distanz zum Standort löst den Alarm aus. Ein grösserer Umkreis gibt mehr Vorlauf, aber mehr Fehlalarme durch vorbeiziehende Zellen.",
+          "poh_threshold": "Hagelwahrscheinlichkeit (POH), ab der eine Radarzelle als Hagel zählt. 80 % ist ein guter Startwert."
         }
       },
       "reauth_confirm": {
@@ -28,19 +50,34 @@
           "device_id": "Geräte-Seriennummer (deviceId)",
           "hwtype_id": "Schnittstellen-ID (hwtypeId)"
         }
+      },
+      "reconfigure_meteoswiss": {
+        "title": "Standort oder Schwellen ändern",
+        "description": "Ändert den Standort, den Umkreis oder die Alarmschwelle. Das neueste Radarprodukt wird einmal geladen, um den Standort zu prüfen.",
+        "data": {
+          "latitude": "Breitengrad",
+          "longitude": "Längengrad",
+          "radius_km": "Umkreis (km)",
+          "poh_threshold": "Alarmschwelle: Hagelwahrscheinlichkeit"
+        }
       }
     },
     "error": {
-      "cannot_connect": "Das VKF-Hagelwarnsystem ist nicht erreichbar. Prüfe die Internetverbindung und versuche es erneut.",
+      "cannot_connect": "Der Datendienst ist nicht erreichbar. Prüfe die Internetverbindung und versuche es erneut.",
       "device_not_found": "Der Dienst kennt diese Kombination aus Seriennummer und Schnittstellen-ID nicht. Prüfe beide Werte anhand deiner VKF-Registrierung.",
       "invalid_device_id": "Gib die Geräte-Seriennummer nur mit Buchstaben und Ziffern ein.",
       "too_many_polls": "Der Dienst hat die Anfrage abgelehnt, weil das tägliche Abfragekontingent dieses Geräts ausgeschöpft ist. Versuche es später erneut.",
+      "invalid_latitude": "Gib einen Breitengrad zwischen -90 und 90 ein.",
+      "invalid_longitude": "Gib einen Längengrad zwischen -180 und 180 ein.",
+      "invalid_radius": "Gib einen Umkreis zwischen 1 und 50 km ein.",
+      "outside_coverage": "Dieser Standort liegt ausserhalb des Schweizer Radarverbunds. Das Hagelradar deckt die Schweiz und ihre unmittelbare Umgebung ab.",
+      "no_data": "MeteoSchweiz hat in den letzten 20 Minuten kein Hagelprodukt veröffentlicht. Versuche es in ein paar Minuten erneut.",
       "unknown": "Der Dienst hat eine unerwartete Antwort geliefert. Prüfe das Home-Assistant-Protokoll und versuche es erneut."
     },
     "abort": {
-      "already_configured": "Diese Geräte-Seriennummer ist bereits konfiguriert.",
+      "already_configured": "Dieses Gerät oder dieser Standort ist bereits konfiguriert.",
       "reauth_successful": "Das Gerät wurde aktualisiert und die Integration neu geladen.",
-      "reconfigure_successful": "Das Gerät wurde aktualisiert und die Integration neu geladen."
+      "reconfigure_successful": "Der Eintrag wurde aktualisiert und die Integration neu geladen."
     }
   },
   "entity": {
@@ -49,7 +86,8 @@
         "state": {
           "no_hail": "Keine Hagelwarnung",
           "hail": "Hagelwarnung",
-          "test_alarm": "Testalarm"
+          "test_alarm": "Testalarm",
+          "off_season": "Ausserhalb der Saison (Oktober bis März)"
         }
       }
     }

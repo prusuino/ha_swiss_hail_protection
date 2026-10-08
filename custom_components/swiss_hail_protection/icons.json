@@ -14,8 +14,18 @@
         "state": {
           "no_hail": "mdi:weather-partly-cloudy",
           "hail": "mdi:weather-hail",
-          "test_alarm": "mdi:test-tube"
+          "test_alarm": "mdi:test-tube",
+          "off_season": "mdi:calendar-remove"
         }
+      },
+      "hail_probability": {
+        "default": "mdi:weather-hail"
+      },
+      "hail_size": {
+        "default": "mdi:diameter-outline"
+      },
+      "radar_time": {
+        "default": "mdi:radar"
       }
     }
   }
