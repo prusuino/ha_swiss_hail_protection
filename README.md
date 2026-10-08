@@ -12,7 +12,7 @@ A Home Assistant custom integration that brings a Swiss hail signal into Home As
 |---|---|---|
 | What it is | The signal of «Hagelschutz – einfach automatisch», the hail-protection system of the Swiss cantonal building insurers (VKF / AEAI / AICAA), computed by SRF Meteo for your registered building | The open-data hail radar products of MeteoSwiss: probability of hail (POH) and expected hail size (MESHS) on a 1 km grid, evaluated around a location you choose |
 | Lead time | About 20 minutes before the hail reaches the building (cell tracking and forecast) | None by itself — the radar shows where hail is now; lead time comes from the radius you configure |
-| Access | A device registered with the VKF (serial + interface id), see [Getting access](#getting-access-vkf-device-serial-and-interface-id) | Free, no registration; any location in Switzerland and its immediate surroundings |
+| Access | A device registered with the VKF (serial + interface id), see [Getting access](#getting-access-vkf-the-device-serial-and-interface-id) | Free, no registration; any location in Switzerland and its immediate surroundings |
 | Season | All year | Products are only computed from 1 April to 30 September |
 | Refresh | Every 120 seconds (as the VKF specification requires) | Every 5 minutes (as the products are published) |
 | Privacy | Device serial and interface id are sent with every poll | Nothing about your location leaves your instance — one file covers all of Switzerland |
@@ -90,7 +90,7 @@ The MeteoSwiss source reads the radar files with [pyfive](https://github.com/jjh
 1. Go to **Settings → Devices & Services → Add Integration**.
 2. Search for **"Swiss Hail Protection"**.
 3. Choose the source:
-   - **VKF hail-warning signal:** enter the **device serial** (`deviceId`) and the **interface id** (`hwtypeId`) from your VKF interface sheet (see [Getting access](#getting-access-vkf-device-serial-and-interface-id)). The serial is letters and digits; the form upper-cases it for you. The integration polls the service once with the values you entered: an unknown serial, an exhausted quota or an unreachable service shows up right here instead of as a failed setup afterwards.
+   - **VKF hail-warning signal:** enter the **device serial** (`deviceId`) and the **interface id** (`hwtypeId`) from your VKF interface sheet (see [Getting access](#getting-access-vkf-the-device-serial-and-interface-id)). The serial is letters and digits; the form upper-cases it for you. The integration polls the service once with the values you entered: an unknown serial, an exhausted quota or an unreachable service shows up right here instead of as a failed setup afterwards.
    - **MeteoSwiss hail radar:** latitude and longitude default to your Home Assistant home location; set the **radius** (default 10 km, up to 50 km) and the **alarm threshold** (probability of hail at which a cell counts as hail, default 80 %). The integration fetches the newest product once to make sure the service is reachable and your location lies inside the radar composite.
 4. Submit. Add the integration again for a second registered device, a second location, or to run both sources side by side — each entry is independent.
 
