@@ -14,9 +14,19 @@ Hail is the single most expensive natural hazard for buildings in Switzerland, a
 
 Traditionally the signal reaches the building through a **VKF signal box**, a small device with a relay that the blind controller is wired to. Building control systems that can talk HTTP do not need the box: the VKF documents a **REST interface** that delivers the same signal, and that is what this integration polls.
 
-**What you need:** a device registered with the VKF — either a signal box you already own (its MAC address is the device serial) or a registration as a building control system without a box. Registration is done through the official site, [hagelschutz-einfach-automatisch.ch](https://www.hagelschutz-einfach-automatisch.ch/); you receive a login for the operator portal [meteo.netitservices.com](https://meteo.netitservices.com), the **device serial (`deviceId`)** and the **interface id (`hwtypeId`)** from the VKF interface sheet. Those two values are all the integration asks for. The service is not public: without a registered device there is nothing to poll.
-
 The integration does one thing: it asks the service every 120 seconds — the interval the VKF specification requires, and the cadence of the signal box — whether a hail warning is active, and exposes the answer. What the house does with it is entirely up to your automations.
+
+## Getting access: the device serial and interface id
+
+The service is **not public**. It only answers for a device the VKF has registered, and the two values the integration asks for — the **device serial (`deviceId`)** and the **interface id (`hwtypeId`)** — are issued by the VKF at registration. You cannot pick them yourself, and the service answers *device not found* for anything it does not know. This is how you get them:
+
+1. **Apply through the official site.** Fill in the interest form at [hagelschutz-einfach-automatisch.ch](https://www.hagelschutz-einfach-automatisch.ch/elektriker-architekten-planer/produkt/ich-habe-interesse.html). Your request goes to the cantonal building insurer responsible for your building, which also checks the financing — the signal box and the platform are free of charge, paid for by the cantonal building insurers; you only carry the internet connection and, for a box, the electrician.
+2. **Say that you will use the REST interface.** The default delivery is a VKF signal box, a small device with a relay that an electrician wires to the blind controller. Home Assistant does not need it: state in the application that your building control system fetches the signal directly over the **METEO REST API** («Schnittstelle»), as described in the VKF interface sheet. The VKF then registers your installation as a building control system without a box.
+3. **What you receive:** a login for the operator portal [meteo.netitservices.com](https://meteo.netitservices.com) and the completed **interface sheet** with the two fields *MAC-Adresse (deviceID)* and *Schnittstelle (hwtypeId)*. Those are the values you enter in the integration's setup dialog — nothing else is needed.
+4. **If you already own a signal box,** its MAC address is the device serial; the interface id for the box is on the same sheet. The integration can poll alongside the box, so Home Assistant sees the same signal the relay switches.
+5. **Finish the VKF procedure.** After setup, run the function test from the portal (switch on *Testalarm*, see [Function test](#function-test)), activate the alarm chain and return the signed acceptance protocol to the VKF — that part is yours, not the integration's.
+
+Note that the VKF designed the system primarily for larger industrial, commercial and office buildings; owners of smaller buildings can apply too, and the VKF publishes a separate information sheet for them.
 
 ## What it provides
 
@@ -54,7 +64,7 @@ Until the integration shows up in the HACS search, the button above adds it as a
 
 1. Go to **Settings → Devices & Services → Add Integration**.
 2. Search for **"Swiss Hail Protection (VKF)"**.
-3. Enter the **device serial** (`deviceId`) and the **interface id** (`hwtypeId`) from your VKF registration. The serial is letters and digits; the form upper-cases it for you.
+3. Enter the **device serial** (`deviceId`) and the **interface id** (`hwtypeId`) from your VKF interface sheet (see [Getting access](#getting-access-the-device-serial-and-interface-id)). The serial is letters and digits; the form upper-cases it for you.
 4. Submit. The integration polls the service once with the values you entered: an unknown serial, an exhausted quota or an unreachable service shows up right here instead of as a failed setup afterwards.
 5. Done. Add the integration again for a second registered device — each instance is independent.
 
