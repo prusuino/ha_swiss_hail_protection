@@ -1,0 +1,57 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Swiss Hail Protection (VKF)",
+        "description": "Verbindet Home Assistant mit dem VKF-Hagelwarnsystem «Hagelschutz – einfach automatisch». Du brauchst ein bei der VKF registriertes Gerät: die Geräte-Seriennummer (deviceId) und die Schnittstellen-ID (hwtypeId) aus den Registrierungsunterlagen oder deinem Konto auf meteo.netitservices.com. Der Dienst wird einmal abgefragt, um beide Werte zu prüfen.",
+        "data": {
+          "device_id": "Geräte-Seriennummer (deviceId)",
+          "hwtype_id": "Schnittstellen-ID (hwtypeId)"
+        },
+        "data_description": {
+          "device_id": "12 Zeichen, Buchstaben und Ziffern – die MAC-Adresse einer VKF-Signalbox oder die für deine Gebäudesteuerung ausgestellte Kennung.",
+          "hwtype_id": "Ganze Zahl gemäss deinem VKF-Schnittstellenblatt."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Gerät nicht mehr bekannt",
+        "description": "Das VKF-Hagelwarnsystem kennt die konfigurierte Geräte-Seriennummer nicht mehr. Gib die aktuelle Seriennummer und Schnittstellen-ID ein.",
+        "data": {
+          "device_id": "Geräte-Seriennummer (deviceId)",
+          "hwtype_id": "Schnittstellen-ID (hwtypeId)"
+        }
+      },
+      "reconfigure": {
+        "title": "Gerät ändern",
+        "description": "Ändert die Geräte-Seriennummer oder die Schnittstellen-ID. Der Dienst wird einmal abgefragt, um beide Werte zu prüfen.",
+        "data": {
+          "device_id": "Geräte-Seriennummer (deviceId)",
+          "hwtype_id": "Schnittstellen-ID (hwtypeId)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Das VKF-Hagelwarnsystem ist nicht erreichbar. Prüfe die Internetverbindung und versuche es erneut.",
+      "device_not_found": "Der Dienst kennt diese Kombination aus Seriennummer und Schnittstellen-ID nicht. Prüfe beide Werte anhand deiner VKF-Registrierung.",
+      "invalid_device_id": "Gib die Geräte-Seriennummer nur mit Buchstaben und Ziffern ein.",
+      "too_many_polls": "Der Dienst hat die Anfrage abgelehnt, weil das tägliche Abfragekontingent dieses Geräts ausgeschöpft ist. Versuche es später erneut.",
+      "unknown": "Der Dienst hat eine unerwartete Antwort geliefert. Prüfe das Home-Assistant-Protokoll und versuche es erneut."
+    },
+    "abort": {
+      "already_configured": "Diese Geräte-Seriennummer ist bereits konfiguriert.",
+      "reauth_successful": "Das Gerät wurde aktualisiert und die Integration neu geladen.",
+      "reconfigure_successful": "Das Gerät wurde aktualisiert und die Integration neu geladen."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "hail_status": {
+        "state": {
+          "no_hail": "Keine Hagelwarnung",
+          "hail": "Hagelwarnung",
+          "test_alarm": "Testalarm"
+        }
+      }
+    }
+  }
+}

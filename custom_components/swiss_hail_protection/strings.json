@@ -1,0 +1,57 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Swiss Hail Protection (VKF)",
+        "description": "Connects Home Assistant to the VKF hail-warning service «Hagelschutz – einfach automatisch». You need a device registered with the VKF: the device serial (deviceId) and the interface id (hwtypeId) from your registration documents or your account at meteo.netitservices.com. The service is polled once to verify them.",
+        "data": {
+          "device_id": "Device serial (deviceId)",
+          "hwtype_id": "Interface id (hwtypeId)"
+        },
+        "data_description": {
+          "device_id": "12 characters, letters and digits – the MAC address of a VKF signal box or the identifier issued for your building control system.",
+          "hwtype_id": "Whole number as stated on your VKF interface sheet."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Device no longer recognised",
+        "description": "The VKF hail-warning service no longer recognises the configured device serial. Enter the current serial and interface id.",
+        "data": {
+          "device_id": "Device serial (deviceId)",
+          "hwtype_id": "Interface id (hwtypeId)"
+        }
+      },
+      "reconfigure": {
+        "title": "Change device",
+        "description": "Change the device serial or the interface id. The service is polled once to verify them.",
+        "data": {
+          "device_id": "Device serial (deviceId)",
+          "hwtype_id": "Interface id (hwtypeId)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "The VKF hail-warning service could not be reached. Check your internet connection and try again.",
+      "device_not_found": "The service does not know this device serial / interface id combination. Check both values against your VKF registration.",
+      "invalid_device_id": "Enter the device serial as letters and digits only.",
+      "too_many_polls": "The service refused the request because the daily poll quota of this device is exhausted. Try again later.",
+      "unknown": "The service gave an unexpected answer. Check the Home Assistant log and try again."
+    },
+    "abort": {
+      "already_configured": "This device serial is already configured.",
+      "reauth_successful": "The device was updated and the integration reloaded.",
+      "reconfigure_successful": "The device was updated and the integration reloaded."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "hail_status": {
+        "state": {
+          "no_hail": "No hail warning",
+          "hail": "Hail warning",
+          "test_alarm": "Test alarm"
+        }
+      }
+    }
+  }
+}

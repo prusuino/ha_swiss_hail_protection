@@ -1,0 +1,22 @@
+{
+  "entity": {
+    "binary_sensor": {
+      "hail_alarm": {
+        "default": "mdi:weather-partly-cloudy",
+        "state": {
+          "on": "mdi:weather-hail"
+        }
+      }
+    },
+    "sensor": {
+      "hail_status": {
+        "default": "mdi:weather-hail",
+        "state": {
+          "no_hail": "mdi:weather-partly-cloudy",
+          "hail": "mdi:weather-hail",
+          "test_alarm": "mdi:test-tube"
+        }
+      }
+    }
+  }
+}

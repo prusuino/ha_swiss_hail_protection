@@ -1,0 +1,57 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Swiss Hail Protection (VKF)",
+        "description": "Connecte Home Assistant au système d'alerte grêle de l'AEAI/VKF « Protection contre la grêle – tout simplement automatique ». Il faut un appareil enregistré auprès de l'AEAI : le numéro de série (deviceId) et l'identifiant d'interface (hwtypeId) figurant dans les documents d'enregistrement ou dans votre compte sur meteo.netitservices.com. Le service est interrogé une fois pour vérifier les deux valeurs.",
+        "data": {
+          "device_id": "Numéro de série de l'appareil (deviceId)",
+          "hwtype_id": "Identifiant d'interface (hwtypeId)"
+        },
+        "data_description": {
+          "device_id": "12 caractères, lettres et chiffres – l'adresse MAC d'une box de signalisation VKF ou l'identifiant délivré pour votre gestion technique du bâtiment.",
+          "hwtype_id": "Nombre entier indiqué sur votre fiche d'interface AEAI/VKF."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Appareil inconnu",
+        "description": "Le système d'alerte grêle ne reconnaît plus le numéro de série configuré. Saisissez le numéro de série et l'identifiant d'interface actuels.",
+        "data": {
+          "device_id": "Numéro de série de l'appareil (deviceId)",
+          "hwtype_id": "Identifiant d'interface (hwtypeId)"
+        }
+      },
+      "reconfigure": {
+        "title": "Modifier l'appareil",
+        "description": "Modifie le numéro de série ou l'identifiant d'interface. Le service est interrogé une fois pour vérifier les deux valeurs.",
+        "data": {
+          "device_id": "Numéro de série de l'appareil (deviceId)",
+          "hwtype_id": "Identifiant d'interface (hwtypeId)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Le système d'alerte grêle est injoignable. Vérifiez la connexion Internet et réessayez.",
+      "device_not_found": "Le service ne connaît pas cette combinaison numéro de série / identifiant d'interface. Vérifiez les deux valeurs dans votre enregistrement AEAI/VKF.",
+      "invalid_device_id": "Saisissez le numéro de série uniquement avec des lettres et des chiffres.",
+      "too_many_polls": "Le service a refusé la requête : le quota d'interrogations journalier de cet appareil est épuisé. Réessayez plus tard.",
+      "unknown": "Le service a renvoyé une réponse inattendue. Consultez le journal de Home Assistant et réessayez."
+    },
+    "abort": {
+      "already_configured": "Ce numéro de série est déjà configuré.",
+      "reauth_successful": "L'appareil a été mis à jour et l'intégration rechargée.",
+      "reconfigure_successful": "L'appareil a été mis à jour et l'intégration rechargée."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "hail_status": {
+        "state": {
+          "no_hail": "Pas d'alerte grêle",
+          "hail": "Alerte grêle",
+          "test_alarm": "Alarme de test"
+        }
+      }
+    }
+  }
+}
