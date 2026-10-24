@@ -70,13 +70,17 @@ Entity names, the device name/manufacturer/model, the config flow and the sensor
 
 ### HACS (recommended)
 
-1. Open **HACS**, search for **"Swiss Hail Protection"** and download it — or use the button, which opens the integration directly in your HACS:
+The integration is not in the HACS default store yet, so it has to be added as a **custom repository** once:
+
+1. Click the button — it opens HACS on your instance with this repository pre-filled — and confirm **Add**:
 
    [![Open in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=prusuino&repository=ha_swiss_hail_protection&category=integration)
 
-2. Restart Home Assistant.
+   Without the button: HACS → three-dot menu (top right) → **Custom repositories** → repository `https://github.com/prusuino/ha_swiss_hail_protection`, type **Integration** → **Add**.
+2. The integration now appears in HACS as **Swiss Hail Protection**; open it and click **Download**.
+3. Restart Home Assistant.
 
-Until the integration shows up in the HACS search, the button above adds it as a custom repository.
+HACS then offers new releases like for any other integration.
 
 ### Manual
 
