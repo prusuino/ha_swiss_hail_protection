@@ -47,9 +47,9 @@ METEOSWISS_MAX_SLOTS_BACK = 4
 # published in October 2026). If the suffix changes, the coordinator
 # discovers the current one from the day's STAC item.
 METEOSWISS_POH_PREFIX = "bzc"
-METEOSWISS_POH_SUFFIX = "vl.845.h5"
+METEOSWISS_POH_SUFFIX = "rl.845.h5"
 METEOSWISS_MESHS_PREFIX = "mzc"
-METEOSWISS_MESHS_SUFFIX = "vl.850.h5"
+METEOSWISS_MESHS_SUFFIX = "rl.850.h5"
 # The hail products are only calculated from 1 April to 30 September.
 METEOSWISS_SEASON_MONTHS = range(4, 10)
 

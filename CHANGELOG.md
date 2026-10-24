@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1 — 2026-10-24
+
+- **Fix: MeteoSwiss setup failed with "The data service could not be reached"** (#1). Two causes: MeteoSwiss renamed the hail product files (suffix `vl` → `rl`, e.g. `bzc…rl.845.h5`), and the data server reports a missing file with HTTP 403 rather than 404, which the integration took for a connection problem — so the built-in file-name discovery never got a chance to run. Missing files are now recognised by either status, and the default names are the current ones; the discovery from the STAC listing remains as the fallback for the next rename. Existing MeteoSwiss entries recover on their own after the update.
+
 ## 1.1.0 — 2026-10-08
 
 - **New: a second source, the MeteoSwiss hail radar.** When adding the integration you now choose between the VKF hail-warning signal (registered device, as before) and the open-data hail radar products of MeteoSwiss — probability of hail (POH) and maximum expected severe hail size (MESHS) on the 1 km Swiss radar composite, published every five minutes. The radar source needs no registration: you enter a location (your home by default), a radius (default 10 km, up to 50 km) and an alarm threshold (default 80 % probability of hail), and the alarm switches on while any cell within the radius reaches the threshold. Nothing about the location leaves your instance — one file covers all of Switzerland, and the evaluation runs locally.

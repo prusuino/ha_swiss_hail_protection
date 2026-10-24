@@ -107,12 +107,17 @@ def latest_slot(now: datetime, publish_delay: timedelta) -> datetime:
 
 
 async def async_download(session: aiohttp.ClientSession, url: str) -> bytes | None:
-    """Fetch a product file; None if it does not exist (yet)."""
+    """Fetch a product file; None if it does not exist (yet).
+
+    The object store behind data.geo.admin.ch answers a missing key with
+    HTTP 403, not 404, so both mean "not there" here. Anything else is a
+    real communication problem.
+    """
     try:
         async with session.get(
             url, timeout=aiohttp.ClientTimeout(total=METEOSWISS_REQUEST_TIMEOUT_SECONDS)
         ) as resp:
-            if resp.status == 404:
+            if resp.status in (403, 404):
                 return None
             if resp.status >= 400:
                 raise MeteoSwissCommunicationError(f"HTTP {resp.status}")
