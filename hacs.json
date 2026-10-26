@@ -1,5 +1,7 @@
 {
   "name": "Swiss Hail Protection (VKF / MeteoSwiss)",
+  "zip_release": true,
+  "filename": "swiss_hail_protection.zip",
   "render_readme": true,
   "homeassistant": "2025.4.0"
 }
