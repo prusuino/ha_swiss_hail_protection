@@ -6,7 +6,6 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
 
 from .const import (
-    CONF_DEVICE_ID,
     CONF_RADIUS_KM,
     CONF_SOURCE,
     DOMAIN,
@@ -62,7 +61,9 @@ def entry_title(hass: HomeAssistant, source: str, data: dict) -> str:
         return t(
             "meteoswiss_device_name", hass, radius=display_radius(data.get(CONF_RADIUS_KM))
         )
-    return t("vkf_device_name", hass, device_id=data.get(CONF_DEVICE_ID, ""))
+    # Never the serial: it is the service's only credential, and entry titles
+    # and device names show up in the UI, in logs and in diagnostics.
+    return t("vkf_device_name", hass)
 
 
 def device_info(hass: HomeAssistant, entry: ConfigEntry) -> DeviceInfo:

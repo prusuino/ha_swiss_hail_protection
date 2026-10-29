@@ -63,7 +63,7 @@ def _vkf_schema(defaults: Mapping[str, Any] | None = None) -> vol.Schema:
                 CONF_DEVICE_ID, default=defaults.get(CONF_DEVICE_ID, vol.UNDEFINED)
             ): selector.TextSelector(
                 selector.TextSelectorConfig(
-                    type=selector.TextSelectorType.TEXT, autocomplete="off"
+                    type=selector.TextSelectorType.PASSWORD, autocomplete="off"
                 )
             ),
             vol.Required(
@@ -205,7 +205,7 @@ class SwissHailProtectionConfigFlow(ConfigFlow, domain=DOMAIN):
             errors[CONF_LATITUDE] = "invalid_latitude"
         if not -180 <= lon <= 180:
             errors[CONF_LONGITUDE] = "invalid_longitude"
-        if not (math.isfinite(radius) and 0 < radius <= MAX_RADIUS_KM):
+        if not (math.isfinite(radius) and 1 <= radius <= MAX_RADIUS_KM):
             errors[CONF_RADIUS_KM] = "invalid_radius"
         if errors:
             return errors, data
@@ -290,9 +290,13 @@ class SwissHailProtectionConfigFlow(ConfigFlow, domain=DOMAIN):
                     reason=reason,
                 )
 
+        # The stored serial is never sent back to the form: the user enters
+        # it again (it is the credential). Only the interface id is pre-filled.
         return self.async_show_form(
             step_id=step_id,
-            data_schema=_vkf_schema(user_input or entry.data),
+            data_schema=_vkf_schema(
+                user_input or {CONF_HWTYPE_ID: entry.data.get(CONF_HWTYPE_ID)}
+            ),
             errors=errors,
         )
 

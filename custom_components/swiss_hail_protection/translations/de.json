@@ -45,7 +45,7 @@
       },
       "reconfigure": {
         "title": "Gerät ändern",
-        "description": "Ändert die Geräte-Seriennummer oder die Schnittstellen-ID. Der Dienst wird einmal abgefragt, um beide Werte zu prüfen.",
+        "description": "Gib die Geräte-Seriennummer erneut ein (sie wird nicht angezeigt, weil sie der einzige Zugangsschlüssel des Dienstes ist), dazu die Schnittstellen-ID. Der Dienst wird einmal abgefragt, um beide Werte zu prüfen.",
         "data": {
           "device_id": "Geräte-Seriennummer (deviceId)",
           "hwtype_id": "Schnittstellen-ID (hwtypeId)"

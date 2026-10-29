@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.2 — 2026-10-29
+
+- **Privacy: the VKF device serial no longer appears in the entry title and the device name.** The serial is the service's only credential, but the title and device name were *Hail Protection VKF <serial>*, so it showed up on the integration and device pages and in any log line or diagnostics file that names the entry. Both are now just *Hail Protection VKF* (in the Home Assistant language); existing entries are renamed on the first start after the update, a device name you set yourself is kept.
+- The serial field in the setup, reauthentication and reconfiguration forms is masked, and the stored serial is no longer pre-filled when you reconfigure an entry — enter it again (only the interface id is pre-filled).
+- The radius check now matches the error text and the documentation: 1 to 50 km.
+- Verified against a live VKF registration, including the VKF function test with a test alarm from the portal.
+
 ## 1.1.1 — 2026-10-24
 
 - **Fix: MeteoSwiss setup failed with "The data service could not be reached"** (#1). Two causes: MeteoSwiss renamed the hail product files (suffix `vl` → `rl`, e.g. `bzc…rl.845.h5`), and the data server reports a missing file with HTTP 403 rather than 404, which the integration took for a connection problem — so the built-in file-name discovery never got a chance to run. Missing files are now recognised by either status, and the default names are the current ones; the discovery from the STAC listing remains as the fallback for the next rename. Existing MeteoSwiss entries recover on their own after the update.

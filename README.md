@@ -94,11 +94,11 @@ The MeteoSwiss source reads the radar files with [pyfive](https://github.com/jjh
 1. Go to **Settings → Devices & Services → Add Integration**.
 2. Search for **"Swiss Hail Protection"**.
 3. Choose the source:
-   - **VKF hail-warning signal:** enter the **device serial** (`deviceId`) and the **interface id** (`hwtypeId`) from your VKF interface sheet (see [Getting access](#getting-access-vkf-the-device-serial-and-interface-id)). The serial is letters and digits; the form upper-cases it for you. The integration polls the service once with the values you entered: an unknown serial, an exhausted quota or an unreachable service shows up right here instead of as a failed setup afterwards.
+   - **VKF hail-warning signal:** enter the **device serial** (`deviceId`) and the **interface id** (`hwtypeId`) from your VKF interface sheet (see [Getting access](#getting-access-vkf-the-device-serial-and-interface-id)). The serial is letters and digits; the form upper-cases it for you. The field is masked like a password, because the serial is the service's only credential. The integration polls the service once with the values you entered: an unknown serial, an exhausted quota or an unreachable service shows up right here instead of as a failed setup afterwards.
    - **MeteoSwiss hail radar:** latitude and longitude default to your Home Assistant home location; set the **radius** (default 10 km, up to 50 km) and the **alarm threshold** (probability of hail at which a cell counts as hail, default 80 %). The integration fetches the newest product once to make sure the service is reachable and your location lies inside the radar composite.
 4. Submit. Add the integration again for a second registered device, a second location, or to run both sources side by side — each entry is independent.
 
-If the VKF service stops recognising the serial later (the VKF reassigned or deactivated the device, say), Home Assistant asks you to **reauthenticate** and you enter the current values. **Reconfigure** on an entry changes its serial and interface id, or its location, radius and threshold, at any time.
+If the VKF service stops recognising the serial later (the VKF reassigned or deactivated the device, say), Home Assistant asks you to **reauthenticate** and you enter the current values. **Reconfigure** on an entry changes its serial and interface id, or its location, radius and threshold, at any time. The stored serial is never shown again: reauthentication and reconfiguration ask you to enter it anew, and the entry and its device are simply called *Hail Protection VKF* (in your language).
 
 ## Automations
 
@@ -145,6 +145,8 @@ Three things worth building in:
 ### Function test (VKF)
 
 The VKF asks every installation to run a **function test** before activating the alarm chain: in the portal at meteo.netitservices.com, switch on the *Testalarm*; within two minutes the binary sensor turns `on` and your blinds should go up; switch the test alarm off and, after the next poll, the sensor turns `off` and the blinds should return. The portal's activity log shows both the delivery and the pick-up of the test alarm. Completing the VKF acceptance protocol is still the owner's job — the integration does not replace it.
+
+The VKF source has been verified against a live VKF registration, including this function test: the test alarm switched from the portal turned the binary sensor `on` with the next poll and raised the blinds through an automation, and the sensor returned to `off` once the test alarm was cleared.
 
 ## Notes
 

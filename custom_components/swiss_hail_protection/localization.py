@@ -12,10 +12,10 @@ SUPPORTED_LANGUAGES = ("de", "en", "fr", "it")
 
 STRINGS: dict[str, dict[str, str]] = {
     "vkf_device_name": {
-        "de": "Hagelschutz VKF {device_id}",
-        "en": "Hail Protection VKF {device_id}",
-        "fr": "Protection grêle VKF {device_id}",
-        "it": "Protezione grandine VKF {device_id}",
+        "de": "Hagelschutz VKF",
+        "en": "Hail Protection VKF",
+        "fr": "Protection grêle VKF",
+        "it": "Protezione grandine VKF",
     },
     "vkf_manufacturer": {
         "de": "Vereinigung Kantonaler Feuerversicherungen (VKF)",

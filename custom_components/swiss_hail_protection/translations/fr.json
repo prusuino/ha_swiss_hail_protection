@@ -45,7 +45,7 @@
       },
       "reconfigure": {
         "title": "Modifier l'appareil",
-        "description": "Modifie le numéro de série ou l'identifiant d'interface. Le service est interrogé une fois pour vérifier les deux valeurs.",
+        "description": "Saisissez à nouveau le numéro de série (il n'est pas affiché, car c'est la seule clé d'accès du service) ainsi que l'identifiant d'interface. Le service est interrogé une fois pour vérifier les deux valeurs.",
         "data": {
           "device_id": "Numéro de série de l'appareil (deviceId)",
           "hwtype_id": "Identifiant d'interface (hwtypeId)"

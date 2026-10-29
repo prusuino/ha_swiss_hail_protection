@@ -45,7 +45,7 @@
       },
       "reconfigure": {
         "title": "Change device",
-        "description": "Change the device serial or the interface id. The service is polled once to verify them.",
+        "description": "Enter the device serial again (it is not shown, as it is the service's only credential) together with the interface id. The service is polled once to verify them.",
         "data": {
           "device_id": "Device serial (deviceId)",
           "hwtype_id": "Interface id (hwtypeId)"
