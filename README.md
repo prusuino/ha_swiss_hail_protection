@@ -1,6 +1,6 @@
 # Swiss Hail Protection (VKF / MeteoSwiss)
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg)](https://github.com/hacs/integration)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 <a href="https://www.buymeacoffee.com/prusuino"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee" height="20"></a>
 
@@ -70,17 +70,15 @@ Entity names, the device name/manufacturer/model, the config flow and the sensor
 
 ### HACS (recommended)
 
-The integration is not in the HACS default store yet, so it has to be added as a **custom repository** once:
-
-1. Click the button — it opens HACS on your instance with this repository pre-filled — and confirm **Add**:
+1. Open **HACS**, search for **"Swiss Hail Protection"** and download it — or use the button, which opens the integration directly in your HACS:
 
    [![Open in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=prusuino&repository=ha_swiss_hail_protection&category=integration)
 
-   Without the button: HACS → three-dot menu (top right) → **Custom repositories** → repository `https://github.com/prusuino/ha_swiss_hail_protection`, type **Integration** → **Add**.
-2. The integration now appears in HACS as **Swiss Hail Protection**; open it and click **Download**.
-3. Restart Home Assistant.
+2. Restart Home Assistant.
 
-HACS then offers new releases like for any other integration.
+The integration is listed in the HACS default store, so no custom repository is needed. HACS then offers new releases like for any other integration.
+
+If your HACS does not show it yet (a newly listed repository can take a few hours to appear), add it as a custom repository once: HACS → three-dot menu (top right) → **Custom repositories** → repository `https://github.com/prusuino/ha_swiss_hail_protection`, type **Integration** → **Add**, then download it as above.
 
 ### Manual
 
