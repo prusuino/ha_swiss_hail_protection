@@ -1,6 +1,6 @@
 # Swiss Hail Protection (VKF / MeteoSwiss)
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg)](https://github.com/hacs/integration)
+[![marketplace_badge](https://img.shields.io/badge/Marketplace-Default-41BDF5.svg)](https://hacs.xyz/docs/marketplace/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 <a href="https://www.buymeacoffee.com/prusuino"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee" height="20"></a>
 
@@ -68,17 +68,17 @@ Entity names, the device name/manufacturer/model, the config flow and the sensor
 
 ## Installation
 
-### HACS (recommended)
+### Home Assistant Marketplace (recommended)
 
-1. Open **HACS**, search for **"Swiss Hail Protection"** and download it — or use the button, which opens the integration directly in your HACS:
+1. Open **Settings → Marketplace** (Home Assistant 2026.11 or newer; on older versions open **HACS**), search for **"Swiss Hail Protection"** and download it — or use the button, which opens the integration directly in your Marketplace:
 
-   [![Open in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=prusuino&repository=ha_swiss_hail_protection&category=integration)
+   [![Open in Marketplace](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=prusuino&repository=ha_swiss_hail_protection&category=integration)
 
 2. Restart Home Assistant.
 
-The integration is listed in the HACS default store, so no custom repository is needed. HACS then offers new releases like for any other integration.
+The integration is listed in the Marketplace default catalog (formerly the HACS default store), so no custom repository is needed. The Marketplace then offers new releases like for any other integration.
 
-If your HACS does not show it yet (a newly listed repository can take a few hours to appear), add it as a custom repository once: HACS → three-dot menu (top right) → **Custom repositories** → repository `https://github.com/prusuino/ha_swiss_hail_protection`, type **Integration** → **Add**, then download it as above.
+If your Marketplace does not show it yet (a newly listed repository can take a few hours to appear), add it as a custom repository once: Marketplace → three-dot menu (top right) → **Custom repositories** → repository `https://github.com/prusuino/ha_swiss_hail_protection`, type **Integration** → **Add**, then download it as above.
 
 ### Manual
 
