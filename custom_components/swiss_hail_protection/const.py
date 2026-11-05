@@ -37,6 +37,10 @@ METEOSWISS_STAC_ITEMS_URL = (
     "https://data.geo.admin.ch/api/stac/v1/collections/ch.meteoschweiz.ogd-radar-hail/items"
 )
 METEOSWISS_REQUEST_TIMEOUT_SECONDS = 30
+# The STAC catalog of data.geo.admin.ch regularly needs 30 s to answer for a
+# day item with several hundred assets; it is only consulted when the product
+# files stop matching, so it may take its time.
+METEOSWISS_CATALOG_TIMEOUT_SECONDS = 90
 METEOSWISS_UPDATE_INTERVAL_SECONDS = 300
 # Products are published a minute or two after their nominal time; the
 # coordinator starts at the newest slot that can realistically exist and
@@ -50,6 +54,11 @@ METEOSWISS_POH_PREFIX = "bzc"
 METEOSWISS_POH_SUFFIX = "rl.845.h5"
 METEOSWISS_MESHS_PREFIX = "mzc"
 METEOSWISS_MESHS_SUFFIX = "rl.850.h5"
+# The suffixes the coordinator last found to work are kept in the config
+# entry options (not user settings: written by the integration), so a start
+# after a MeteoSwiss rename does not begin with the stale built-in names.
+OPT_METEOSWISS_POH_SUFFIX = "meteoswiss_poh_suffix"
+OPT_METEOSWISS_MESHS_SUFFIX = "meteoswiss_meshs_suffix"
 # The hail products are only calculated from 1 April to 30 September.
 METEOSWISS_SEASON_MONTHS = range(4, 10)
 

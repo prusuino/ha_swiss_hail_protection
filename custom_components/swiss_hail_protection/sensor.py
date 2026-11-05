@@ -136,6 +136,14 @@ class RadarTimeSensor(_HailSensor):
     _attr_translation_key = "radar_time"
 
     @property
+    def available(self) -> bool:
+        # Diagnostic by nature: the time of the newest product stays readable
+        # while MeteoSwiss publishes nothing new, so its age shows how long the
+        # gap is. The values derived from that product do go unavailable.
+        data = self.coordinator.data
+        return data is not None and data.radar_time is not None
+
+    @property
     def native_value(self) -> datetime | None:
         data = self.coordinator.data
         return data.radar_time if data else None

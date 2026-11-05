@@ -36,6 +36,8 @@ from .const import (
     METEOSWISS_PUBLISH_DELAY_SECONDS,
     METEOSWISS_SEASON_MONTHS,
     METEOSWISS_UPDATE_INTERVAL_SECONDS,
+    OPT_METEOSWISS_MESHS_SUFFIX,
+    OPT_METEOSWISS_POH_SUFFIX,
     SOURCE_METEOSWISS,
     SOURCE_VKF,
     STATE_CODE_NO_HAIL,
@@ -91,6 +93,15 @@ def parse_state_code(state_code: int) -> HailData:
         test_alarm=state_code == STATE_CODE_TEST_ALARM,
         state_code=state_code,
     )
+
+
+class MeteoSwissNoCurrentData(UpdateFailed):
+    """MeteoSwiss has published no hail product for the recent slots.
+
+    A property of the source (publication gaps happen), not of this instance:
+    the setup goes ahead and the entities stay unavailable until a product
+    appears, instead of the entry failing to set up.
+    """
 
 
 class HailCoordinator(DataUpdateCoordinator[HailData]):
@@ -224,8 +235,29 @@ class MeteoSwissCoordinator(HailCoordinator):
 
     def __init__(self, hass: HomeAssistant, entry: ConfigEntry) -> None:
         super().__init__(hass, entry, METEOSWISS_UPDATE_INTERVAL_SECONDS)
-        self._suffixes = [METEOSWISS_POH_SUFFIX, METEOSWISS_MESHS_SUFFIX]
+        # Start with the suffixes that worked last time (entry options), else the built-in ones.
+        self._suffixes = [
+            entry.options.get(OPT_METEOSWISS_POH_SUFFIX) or METEOSWISS_POH_SUFFIX,
+            entry.options.get(OPT_METEOSWISS_MESHS_SUFFIX) or METEOSWISS_MESHS_SUFFIX,
+        ]
         self._last_slot: datetime | None = None
+
+    def _remember_suffixes(self) -> None:
+        """Keep the suffixes that just worked in the entry options for the next start."""
+        options = self._entry.options
+        if [
+            options.get(OPT_METEOSWISS_POH_SUFFIX),
+            options.get(OPT_METEOSWISS_MESHS_SUFFIX),
+        ] == self._suffixes:
+            return
+        self.hass.config_entries.async_update_entry(
+            self._entry,
+            options={
+                **options,
+                OPT_METEOSWISS_POH_SUFFIX: self._suffixes[0],
+                OPT_METEOSWISS_MESHS_SUFFIX: self._suffixes[1],
+            },
+        )
 
     async def _async_update_data(self) -> HailData:
         data = self._entry.data
@@ -246,10 +278,13 @@ class MeteoSwissCoordinator(HailCoordinator):
                 float(data[CONF_RADIUS_KM]),
                 float(data[CONF_POH_THRESHOLD]),
             )
+        except meteoswiss.MeteoSwissNoDataError as err:
+            raise MeteoSwissNoCurrentData(f"MeteoSwiss hail radar data unavailable: {err}") from err
         except meteoswiss.MeteoSwissError as err:
             raise UpdateFailed(f"MeteoSwiss hail radar data unavailable: {err}") from err
 
         self._last_slot = slot
+        self._remember_suffixes()
         return _status_for(evaluation, slot, float(data[CONF_POH_THRESHOLD]))
 
 

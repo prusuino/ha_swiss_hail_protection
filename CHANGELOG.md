@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.0 — 2026-11-05
+
+- **Changed: a publication gap at MeteoSwiss no longer fails the setup.** When MeteoSwiss has published no hail product for the last 20 minutes while Home Assistant starts (it happened for several hours on 5 November), the MeteoSwiss entry used to end up as *failed to set up* and be retried. It now loads, its values are unavailable as before, a warning names the gap, and the alarm resumes with the next product. A service that cannot be reached at all is still retried the usual way.
+- **Changed: the radar time sensor stays readable during a gap.** All other values of a MeteoSwiss entry go unavailable while no current product exists; the diagnostic `radar_time` sensor keeps the time of the newest product, so its age shows how long the gap is.
+- **Changed: the product file names found to work are remembered.** MeteoSwiss renamed the files again on 3 and 4 November (`rl` → `tl` → `vl`); the discovery from the day's catalog entry caught it, but every start began with the stale built-in names, four misses and a catalog request. The names that worked are now kept with the config entry and used from the next start; the built-in names remain the fallback for a fresh entry.
+- **Fixed: the catalog lookup was on the edge of its timeout.** The STAC catalog regularly takes about 30 seconds to answer, which was exactly the request timeout; the lookup now allows 90 seconds, and when today's catalog entry does not exist yet (right after midnight UTC) yesterday's is consulted instead of reporting a connection error.
+- No changes for VKF entries, to entity ids or to the alarm logic.
+
 ## 1.1.2 — 2026-10-29
 
 - **Privacy: the VKF device serial no longer appears in the entry title and the device name.** The serial is the service's only credential, but the title and device name were *Hail Protection VKF <serial>*, so it showed up on the integration and device pages and in any log line or diagnostics file that names the entry. Both are now just *Hail Protection VKF* (in the Home Assistant language); existing entries are renamed on the first start after the update, a device name you set yourself is kept.

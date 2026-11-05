@@ -25,6 +25,7 @@ from .const import (
     GRID_ROWS,
     GRID_WEST_E,
     METEOSWISS_BASE_URL,
+    METEOSWISS_CATALOG_TIMEOUT_SECONDS,
     METEOSWISS_MESHS_PREFIX,
     METEOSWISS_MESHS_SUFFIX,
     METEOSWISS_POH_PREFIX,
@@ -133,21 +134,30 @@ async def async_discover_suffixes(
 ) -> tuple[str | None, str | None]:
     """Current file-name suffixes of the two products, from the day's STAC item.
 
-    Only used when the built-in suffixes stop matching. Returns (POH, MESHS);
-    either is None if the day lists no such product.
+    Only used when the known suffixes stop matching. Returns (POH, MESHS);
+    either is None if no such product is listed. The day item is created with
+    the day's first product, so right after midnight UTC (or when nothing was
+    published yet today) the previous day's item is consulted instead.
     """
-    url = f"{METEOSWISS_STAC_ITEMS_URL}/{day:%Y%m%d}-ch"
-    try:
-        async with session.get(
-            url, timeout=aiohttp.ClientTimeout(total=METEOSWISS_REQUEST_TIMEOUT_SECONDS)
-        ) as resp:
-            if resp.status >= 400:
-                raise MeteoSwissCommunicationError(f"HTTP {resp.status}")
-            item = await resp.json(content_type=None)
-    except TimeoutError as err:
-        raise MeteoSwissCommunicationError("timeout") from err
-    except (aiohttp.ClientError, ValueError) as err:
-        raise MeteoSwissCommunicationError(type(err).__name__) from err
+    item: dict | None = None
+    for candidate in (day, day - timedelta(days=1)):
+        url = f"{METEOSWISS_STAC_ITEMS_URL}/{candidate:%Y%m%d}-ch"
+        try:
+            async with session.get(
+                url, timeout=aiohttp.ClientTimeout(total=METEOSWISS_CATALOG_TIMEOUT_SECONDS)
+            ) as resp:
+                if resp.status == 404:
+                    continue
+                if resp.status >= 400:
+                    raise MeteoSwissCommunicationError(f"HTTP {resp.status}")
+                item = await resp.json(content_type=None)
+                break
+        except TimeoutError as err:
+            raise MeteoSwissCommunicationError("timeout") from err
+        except (aiohttp.ClientError, ValueError) as err:
+            raise MeteoSwissCommunicationError(type(err).__name__) from err
+    if item is None:
+        return None, None
 
     def suffix_for(prefix: str) -> str | None:
         names = sorted(
