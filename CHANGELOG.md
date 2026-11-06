@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.1 — 2026-11-06
+
+- Fixed: the manifest now declares the dependency on Home Assistant's `http` component, which serves the dashboard strategy file. Nothing changes at runtime (`http` is always loaded); it is what Home Assistant's manifest validation (hassfest) requires.
+
 ## 1.3.0 — 2026-11-06
 
 - **New: triggers and conditions in the automation editor** (Home Assistant 2026.10 / 2026.11 or newer). *Hail alarm started*, *Hail alarm cleared* and *VKF test alarm started* appear in the trigger list, *Hail alarm is active* and *Hail alarm is not active* in the condition list, in all four languages. Each targets the integration's own entities, so a device or area target never picks up an unrelated safety sensor; the usual *for* and behaviour options apply. On older versions nothing changes: the entries are simply not offered.
