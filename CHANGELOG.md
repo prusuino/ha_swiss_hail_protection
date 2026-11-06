@@ -2,6 +2,8 @@
 
 ## 1.3.0 — 2026-11-06
 
+- **New: triggers and conditions in the automation editor** (Home Assistant 2026.10 / 2026.11 or newer). *Hail alarm started*, *Hail alarm cleared* and *VKF test alarm started* appear in the trigger list, *Hail alarm is active* and *Hail alarm is not active* in the condition list, in all four languages. Each targets the integration's own entities, so a device or area target never picks up an unrelated safety sensor; the usual *for* and behaviour options apply. On older versions nothing changes: the entries are simply not offered.
+- **New: a blueprint, *raise blinds on hail alarm*.** One-click import from the README: raises the selected covers when the alarm starts, stores their positions in a snapshot scene and restores them once the alarm has been over for a configurable hold time (default 15 minutes); a returning alarm does not overwrite the snapshot. Two action fields take your own steps for the alarm and the all-clear.
 - **New: a dashboard strategy.** The integration now serves `/swiss_hail_protection_files/swiss-hail-protection-dashboard.js`, a recipe Home Assistant renders in the browser: one section per config entry with the alarm and the status, and for a MeteoSwiss radar entry the probability of hail, the hail size, the radar time and a six-hour history of the probability — generated live from your config entries, nothing is written into your dashboard configuration. Register the file once as a Lovelace resource (JavaScript module), then pick *Swiss Hail Protection* under **Settings → Dashboards → + Add dashboard**, or fill a single view of your own dashboard with `custom:swiss-hail-protection`; `title` and `max_columns` can be set under `strategy:`. The README has the details.
 
 ## 1.2.0 — 2026-11-05

@@ -91,5 +91,69 @@
         }
       }
     }
+  },
+  "triggers": {
+    "alarm_started": {
+      "name": "Allarme grandine attivato",
+      "description": "Si attiva all'inizio di un allarme grandine: un avviso reale o un allarme di prova AICAA, dal segnale AICAA o dal radar di MeteoSvizzera.",
+      "fields": {
+        "behavior": {
+          "name": "Attiva quando"
+        },
+        "for": {
+          "name": "Per almeno"
+        }
+      }
+    },
+    "alarm_cleared": {
+      "name": "Allarme grandine terminato",
+      "description": "Si attiva alla fine di un allarme grandine.",
+      "fields": {
+        "behavior": {
+          "name": "Attiva quando"
+        },
+        "for": {
+          "name": "Per almeno"
+        }
+      }
+    },
+    "test_alarm_started": {
+      "name": "Allarme di prova AICAA attivato",
+      "description": "Si attiva quando l'AICAA segnala un allarme di prova (controllo di funzionamento). Anche l'allarme grandine si accende; usa questo trigger solo per formulare diversamente una notifica.",
+      "fields": {
+        "behavior": {
+          "name": "Attiva quando"
+        },
+        "for": {
+          "name": "Per almeno"
+        }
+      }
+    }
+  },
+  "conditions": {
+    "is_alarm_active": {
+      "name": "Allarme grandine attivo",
+      "description": "Verifica se almeno un allarme grandine è acceso.",
+      "fields": {
+        "behavior": {
+          "name": "Condizione soddisfatta se"
+        },
+        "for": {
+          "name": "Per almeno"
+        }
+      }
+    },
+    "is_alarm_inactive": {
+      "name": "Allarme grandine non attivo",
+      "description": "Verifica se gli allarmi grandine sono spenti.",
+      "fields": {
+        "behavior": {
+          "name": "Condizione soddisfatta se"
+        },
+        "for": {
+          "name": "Per almeno"
+        }
+      }
+    }
   }
 }

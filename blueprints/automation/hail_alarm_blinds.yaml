@@ -1,0 +1,126 @@
+blueprint:
+  name: Swiss Hail Protection – raise blinds on hail alarm
+  description: >-
+    Raises the selected blinds when a hail alarm starts and puts them back
+    where they were once the alarm has been over for a while. Works with the
+    VKF signal and the MeteoSwiss radar alike, and treats a VKF test alarm
+    like a real warning – that is what the VKF function test checks.
+
+
+    The positions are stored in a snapshot scene when the alarm starts and
+    restored after the hold time; the snapshot is deleted after restoring, so
+    an alarm that returns while the blinds are still up does not overwrite it.
+    Blinds without position reporting are restored to open or closed.
+
+
+    Add your own steps for the alarm (a notification, pausing other blind
+    automations) and for the all-clear in the two action fields.
+  domain: automation
+  source_url: https://github.com/prusuino/ha_swiss_hail_protection/blob/main/blueprints/automation/hail_alarm_blinds.yaml
+  author: prusuino
+  homeassistant:
+    min_version: 2025.4.0
+  input:
+    alarm_sensor:
+      name: Hail alarm
+      description: The hail alarm of a Swiss Hail Protection entry.
+      selector:
+        entity:
+          filter:
+            - integration: swiss_hail_protection
+              domain: binary_sensor
+    covers:
+      name: Blinds
+      description: The covers to raise while the alarm is on.
+      selector:
+        entity:
+          multiple: true
+          filter:
+            - domain: cover
+    hold_time:
+      name: Hold time after the all-clear
+      description: >-
+        How long the alarm has to stay off before the blinds are restored.
+        With the radar source a cell can dip below the threshold for one
+        five-minute product and be back the next; 15 minutes keeps the blinds
+        from going up and down in between.
+      default:
+        minutes: 15
+      selector:
+        duration:
+    restore:
+      name: Restore the blinds afterwards
+      description: Put the blinds back to the positions they had when the alarm started.
+      default: true
+      selector:
+        boolean:
+    alarm_actions:
+      name: Additional actions on alarm
+      description: Run after the blinds have been raised – a notification, for example.
+      default: []
+      selector:
+        action:
+    cleared_actions:
+      name: Additional actions on all-clear
+      description: Run after the blinds have been restored.
+      default: []
+      selector:
+        action:
+
+mode: queued
+max_exceeded: silent
+
+triggers:
+  - trigger: state
+    entity_id: !input alarm_sensor
+    to: "on"
+    id: alarm
+  - trigger: state
+    entity_id: !input alarm_sensor
+    from: "on"
+    to: "off"
+    for: !input hold_time
+    id: cleared
+
+variables:
+  restore: !input restore
+  # One snapshot per automation, so several instances of this blueprint do
+  # not overwrite each other's positions.
+  scene_name: "hail_blinds_{{ this.entity_id.split('.')[1] }}"
+  scene_entity: "scene.{{ scene_name }}"
+
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: alarm
+        sequence:
+          - if:
+              # Only snapshot when none is waiting: an alarm that returns
+              # while the blinds are still up must not record them as open.
+              - condition: template
+                value_template: "{{ restore and states[scene_entity] is none }}"
+            then:
+              - action: scene.create
+                data:
+                  scene_id: "{{ scene_name }}"
+                  snapshot_entities: !input covers
+          - action: cover.open_cover
+            target:
+              entity_id: !input covers
+          - sequence: !input alarm_actions
+      - conditions:
+          - condition: trigger
+            id: cleared
+        sequence:
+          - if:
+              - condition: template
+                value_template: "{{ restore and states[scene_entity] is not none }}"
+            then:
+              - action: scene.turn_on
+                target:
+                  entity_id: "{{ scene_entity }}"
+              - action: scene.delete
+                target:
+                  entity_id: "{{ scene_entity }}"
+          - sequence: !input cleared_actions

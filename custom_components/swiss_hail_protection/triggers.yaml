@@ -1,0 +1,34 @@
+.trigger_common_fields: &trigger_common_fields
+  behavior:
+    required: true
+    default: each
+    selector:
+      automation_behavior:
+        mode: trigger
+  for:
+    required: true
+    default: 00:00:00
+    selector:
+      duration:
+
+.alarm_target: &alarm_target
+  entity:
+    - integration: swiss_hail_protection
+      domain: binary_sensor
+      device_class: safety
+
+alarm_started:
+  fields: *trigger_common_fields
+  target: *alarm_target
+
+alarm_cleared:
+  fields: *trigger_common_fields
+  target: *alarm_target
+
+test_alarm_started:
+  fields: *trigger_common_fields
+  target:
+    entity:
+      - integration: swiss_hail_protection
+        domain: sensor
+        device_class: enum

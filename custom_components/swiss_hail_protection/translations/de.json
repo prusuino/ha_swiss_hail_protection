@@ -91,5 +91,69 @@
         }
       }
     }
+  },
+  "triggers": {
+    "alarm_started": {
+      "name": "Hagelalarm ausgelöst",
+      "description": "Löst aus, wenn ein Hagelalarm beginnt: eine echte Warnung oder ein VKF-Testalarm, vom VKF-Signal oder vom MeteoSchweiz-Radar.",
+      "fields": {
+        "behavior": {
+          "name": "Auslösen wenn"
+        },
+        "for": {
+          "name": "Mindestens für"
+        }
+      }
+    },
+    "alarm_cleared": {
+      "name": "Hagelalarm beendet",
+      "description": "Löst aus, wenn ein Hagelalarm endet.",
+      "fields": {
+        "behavior": {
+          "name": "Auslösen wenn"
+        },
+        "for": {
+          "name": "Mindestens für"
+        }
+      }
+    },
+    "test_alarm_started": {
+      "name": "VKF-Testalarm ausgelöst",
+      "description": "Löst aus, wenn die VKF einen Testalarm (Funktionskontrolle) meldet. Der Hagelalarm selbst schaltet ebenfalls ein; diesen Trigger nur nutzen, um eine Meldung anders zu formulieren.",
+      "fields": {
+        "behavior": {
+          "name": "Auslösen wenn"
+        },
+        "for": {
+          "name": "Mindestens für"
+        }
+      }
+    }
+  },
+  "conditions": {
+    "is_alarm_active": {
+      "name": "Hagelalarm ist aktiv",
+      "description": "Prüft, ob mindestens ein Hagelalarm eingeschaltet ist.",
+      "fields": {
+        "behavior": {
+          "name": "Bedingung erfüllt wenn"
+        },
+        "for": {
+          "name": "Mindestens für"
+        }
+      }
+    },
+    "is_alarm_inactive": {
+      "name": "Hagelalarm ist nicht aktiv",
+      "description": "Prüft, ob Hagelalarme ausgeschaltet sind.",
+      "fields": {
+        "behavior": {
+          "name": "Bedingung erfüllt wenn"
+        },
+        "for": {
+          "name": "Mindestens für"
+        }
+      }
+    }
   }
 }

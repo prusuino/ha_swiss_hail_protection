@@ -91,5 +91,69 @@
         }
       }
     }
+  },
+  "triggers": {
+    "alarm_started": {
+      "name": "Alarme grêle déclenchée",
+      "description": "Se déclenche au début d'une alarme grêle : une vraie alerte ou un test AEAI, depuis le signal AEAI ou le radar de MétéoSuisse.",
+      "fields": {
+        "behavior": {
+          "name": "Déclencher quand"
+        },
+        "for": {
+          "name": "Pendant au moins"
+        }
+      }
+    },
+    "alarm_cleared": {
+      "name": "Alarme grêle terminée",
+      "description": "Se déclenche à la fin d'une alarme grêle.",
+      "fields": {
+        "behavior": {
+          "name": "Déclencher quand"
+        },
+        "for": {
+          "name": "Pendant au moins"
+        }
+      }
+    },
+    "test_alarm_started": {
+      "name": "Test d'alarme AEAI déclenché",
+      "description": "Se déclenche quand l'AEAI signale un test d'alarme (contrôle de fonctionnement). L'alarme grêle s'active aussi ; n'utilisez ce déclencheur que pour formuler une notification différemment.",
+      "fields": {
+        "behavior": {
+          "name": "Déclencher quand"
+        },
+        "for": {
+          "name": "Pendant au moins"
+        }
+      }
+    }
+  },
+  "conditions": {
+    "is_alarm_active": {
+      "name": "Alarme grêle active",
+      "description": "Vérifie si au moins une alarme grêle est active.",
+      "fields": {
+        "behavior": {
+          "name": "Condition remplie si"
+        },
+        "for": {
+          "name": "Pendant au moins"
+        }
+      }
+    },
+    "is_alarm_inactive": {
+      "name": "Alarme grêle inactive",
+      "description": "Vérifie si les alarmes grêle sont inactives.",
+      "fields": {
+        "behavior": {
+          "name": "Condition remplie si"
+        },
+        "for": {
+          "name": "Pendant au moins"
+        }
+      }
+    }
   }
 }

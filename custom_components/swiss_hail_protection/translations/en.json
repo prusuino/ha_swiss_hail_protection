@@ -91,5 +91,69 @@
         }
       }
     }
+  },
+  "triggers": {
+    "alarm_started": {
+      "name": "Hail alarm started",
+      "description": "Triggers when a hail alarm starts: a real warning or a VKF test alarm, from the VKF signal or the MeteoSwiss radar.",
+      "fields": {
+        "behavior": {
+          "name": "Trigger when"
+        },
+        "for": {
+          "name": "For at least"
+        }
+      }
+    },
+    "alarm_cleared": {
+      "name": "Hail alarm cleared",
+      "description": "Triggers when a hail alarm ends.",
+      "fields": {
+        "behavior": {
+          "name": "Trigger when"
+        },
+        "for": {
+          "name": "For at least"
+        }
+      }
+    },
+    "test_alarm_started": {
+      "name": "VKF test alarm started",
+      "description": "Triggers when the VKF signals a test alarm (function test). The hail alarm itself also switches on; use this trigger only to word a notification differently.",
+      "fields": {
+        "behavior": {
+          "name": "Trigger when"
+        },
+        "for": {
+          "name": "For at least"
+        }
+      }
+    }
+  },
+  "conditions": {
+    "is_alarm_active": {
+      "name": "Hail alarm is active",
+      "description": "Tests if one or more hail alarms are on.",
+      "fields": {
+        "behavior": {
+          "name": "Condition passes if"
+        },
+        "for": {
+          "name": "For at least"
+        }
+      }
+    },
+    "is_alarm_inactive": {
+      "name": "Hail alarm is not active",
+      "description": "Tests if one or more hail alarms are off.",
+      "fields": {
+        "behavior": {
+          "name": "Condition passes if"
+        },
+        "for": {
+          "name": "For at least"
+        }
+      }
+    }
   }
 }

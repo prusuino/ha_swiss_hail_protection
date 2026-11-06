@@ -28,5 +28,24 @@
         "default": "mdi:radar"
       }
     }
+  },
+  "triggers": {
+    "alarm_started": {
+      "trigger": "mdi:weather-hail"
+    },
+    "alarm_cleared": {
+      "trigger": "mdi:weather-partly-cloudy"
+    },
+    "test_alarm_started": {
+      "trigger": "mdi:test-tube"
+    }
+  },
+  "conditions": {
+    "is_alarm_active": {
+      "condition": "mdi:weather-hail"
+    },
+    "is_alarm_inactive": {
+      "condition": "mdi:weather-partly-cloudy"
+    }
   }
 }

@@ -175,7 +175,50 @@ That view is regenerated like the full dashboard is, so new config entries still
 
 ## Automations
 
-The VKF expects the building to **raise the blinds fully** while the signal is active and to restore them afterwards; the same makes sense for the radar alarm. A minimal pair of automations:
+The VKF expects the building to **raise the blinds fully** while the signal is active and to restore them afterwards; the same makes sense for the radar alarm.
+
+### Blueprint: raise blinds on hail alarm
+
+The repository ships a blueprint that does exactly that. Import it once, then create an automation from it and pick your alarm entity and your covers:
+
+[![Import blueprint](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fprusuino%2Fha_swiss_hail_protection%2Fblob%2Fmain%2Fblueprints%2Fautomation%2Fhail_alarm_blinds.yaml)
+
+What it does:
+
+- **Alarm starts** (real warning or VKF test alarm): stores the current positions of the selected covers in a snapshot scene and raises them. Your own additional actions (a notification, pausing other blind automations) run afterwards.
+- **Alarm over for the hold time** (default 15 minutes): restores the positions from the snapshot and deletes it, then runs your additional all-clear actions. The hold time keeps the blinds from going up and down when a radar cell dips below the threshold for one five-minute product.
+- An alarm that returns while the blinds are still up does not overwrite the snapshot, so the original positions survive. Covers without position reporting are restored to open or closed.
+
+Set *Restore the blinds afterwards* to off if you prefer to lower them yourself.
+
+### Triggers and conditions in the automation editor
+
+On Home Assistant 2026.10 or newer the integration adds its own entries to the automation editor, so you do not need a state trigger on a specific entity:
+
+| Trigger | Fires when |
+|---|---|
+| **Hail alarm started** | an alarm entity switches on – real warning or VKF test alarm, from either source |
+| **Hail alarm cleared** | an alarm entity switches off |
+| **VKF test alarm started** | the status entity switches to *test alarm* (function test); the hail alarm switches on as well, so use this only to word a notification differently |
+
+On 2026.11 or newer there are also two conditions, **Hail alarm is active** and **Hail alarm is not active**, for the other blind automations that should stand back while a warning is on. Each trigger and condition targets the integration's own entities (pick an entity, a device or an area); the usual *for* duration and *trigger when* / *condition passes if* behaviour options apply.
+
+In YAML:
+
+```yaml
+triggers:
+  - trigger: swiss_hail_protection.alarm_started
+    target:
+      entity_id: binary_sensor.swiss_hail_protection_alarm_7f3a
+conditions:
+  - condition: swiss_hail_protection.is_alarm_inactive
+    target:
+      entity_id: binary_sensor.swiss_hail_protection_alarm_7f3a
+```
+
+### Building it yourself
+
+A minimal pair of automations without the blueprint:
 
 ```yaml
 automation:

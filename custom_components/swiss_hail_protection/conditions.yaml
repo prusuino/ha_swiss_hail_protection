@@ -1,0 +1,26 @@
+.condition_common_fields: &condition_common_fields
+  behavior:
+    required: true
+    default: any
+    selector:
+      automation_behavior:
+        mode: condition
+  for:
+    required: true
+    default: 00:00:00
+    selector:
+      duration:
+
+.alarm_target: &alarm_target
+  entity:
+    - integration: swiss_hail_protection
+      domain: binary_sensor
+      device_class: safety
+
+is_alarm_active:
+  fields: *condition_common_fields
+  target: *alarm_target
+
+is_alarm_inactive:
+  fields: *condition_common_fields
+  target: *alarm_target
