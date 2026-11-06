@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0 — 2026-11-06
+
+- **New: a dashboard strategy.** The integration now serves `/swiss_hail_protection_files/swiss-hail-protection-dashboard.js`, a recipe Home Assistant renders in the browser: one section per config entry with the alarm and the status, and for a MeteoSwiss radar entry the probability of hail, the hail size, the radar time and a six-hour history of the probability — generated live from your config entries, nothing is written into your dashboard configuration. Register the file once as a Lovelace resource (JavaScript module), then pick *Swiss Hail Protection* under **Settings → Dashboards → + Add dashboard**, or fill a single view of your own dashboard with `custom:swiss-hail-protection`; `title` and `max_columns` can be set under `strategy:`. The README has the details.
+
 ## 1.2.0 — 2026-11-05
 
 - **Changed: a publication gap at MeteoSwiss no longer fails the setup.** When MeteoSwiss has published no hail product for the last 20 minutes while Home Assistant starts (it happened for several hours on 5 November), the MeteoSwiss entry used to end up as *failed to set up* and be retried. It now loads, its values are unavailable as before, a warning names the gap, and the alarm resumes with the next product. A service that cannot be reached at all is still retried the usual way.

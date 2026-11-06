@@ -98,6 +98,81 @@ The MeteoSwiss source reads the radar files with [pyfive](https://github.com/jjh
 
 If the VKF service stops recognising the serial later (the VKF reassigned or deactivated the device, say), Home Assistant asks you to **reauthenticate** and you enter the current values. **Reconfigure** on an entry changes its serial and interface id, or its location, radius and threshold, at any time. The stored serial is never shown again: reauthentication and reconfiguration ask you to enter it anew, and the entry and its device are simply called *Hail Protection VKF* (in your language).
 
+## Dashboard
+
+The integration ships a **dashboard strategy**: a recipe Home Assistant renders in the browser, rather than a dashboard written into your configuration. Nothing is stored, nothing is overwritten, and the result follows your setup — add a config entry and its section appears on the next page load; remove one and it is gone.
+
+The integration deliberately does not create or modify any dashboard on your behalf — your dashboards stay entirely under your own control.
+
+### Adding the strategy as a resource
+
+The integration serves the strategy file, but registering it as a Lovelace resource is left to you — the resource list is part of your dashboard configuration, and an integration has no business writing into it. It is a one-time step:
+
+**Settings → Dashboards → ⋮ (top right) → Resources → + Add resource**
+
+| Field | Value |
+|---|---|
+| URL | `/swiss_hail_protection_files/swiss-hail-protection-dashboard.js` |
+| Resource type | JavaScript module |
+
+The *Resources* entry is only shown when **Advanced mode** is enabled in your user profile (click your name at the bottom of the sidebar). Then reload the page (Ctrl/Cmd+Shift+R).
+
+### Using the strategy
+
+1. **Settings → Dashboards → + Add dashboard → New dashboard from scratch**, give it a name.
+2. Open it, then **✏️ (edit) → ⋮ → Raw configuration editor**.
+3. Replace the entire content with:
+
+```yaml
+strategy:
+  type: custom:swiss-hail-protection
+views: []
+```
+
+4. Save.
+
+You get:
+
+- an **Overview** view — one section per config entry: the alarm and the status as tiles; a MeteoSwiss radar entry adds the probability of hail, the expected hail size, the radar time and a history graph of the probability over the last six hours. The sources in use are credited at the bottom.
+
+The strategy also appears under **+ Add dashboard** as *Swiss Hail Protection*, which does the same thing without the raw editor.
+
+Everything the strategy produces is a normal Home Assistant dashboard built from standard cards. If you would rather arrange things yourself, the entities above are all you need — the strategy is an offer, not a requirement.
+
+### Adjusting the strategy
+
+A strategy dashboard has no card editor — the layout is generated fresh on every load. You still have two ways to shape it without giving that up:
+
+**Options.** Anything you add under `strategy:` is passed to the recipe:
+
+```yaml
+strategy:
+  type: custom:swiss-hail-protection
+  title: My title
+  max_columns: 3
+views: []
+```
+
+| Option | Effect |
+|---|---|
+| `title` | dashboard title |
+| `max_columns` | column count of the generated section views |
+
+**One view inside your own dashboard.** Instead of a separate dashboard, let the strategy fill a single view of one you already have. Open your dashboard's raw configuration editor and add a view:
+
+```yaml
+views:
+  - title: Home
+    # ... your own cards ...
+  - title: Swiss Hail Protection
+    strategy:
+      type: custom:swiss-hail-protection
+```
+
+That view is regenerated like the full dashboard is, so new config entries still appear by themselves, while every other view stays yours to edit. The same options work here too.
+
+> **Take control** (⋮ menu) turns a strategy dashboard into a static one you can edit card by card — but it is one-way: the dashboard stops following your config entries from then on. Prefer the two approaches above.
+
 ## Automations
 
 The VKF expects the building to **raise the blinds fully** while the signal is active and to restore them afterwards; the same makes sense for the radar alarm. A minimal pair of automations:
