@@ -273,6 +273,7 @@ The VKF source has been verified against a live VKF registration, including this
 - **An undocumented VKF state code** (a value other than 0, 1 or 2) is treated as an active warning, following the VKF's advice to read the state as zero / non-zero; the status sensor shows *unknown* for it, and a warning is logged once.
 - The integration does not use the VKF error-report endpoint; it only reads.
 - This integration is unofficial and not affiliated with, endorsed by, or supported by the VKF, SRF Meteo, NetITServices or MeteoSwiss. See [NOTICE.md](NOTICE.md).
+- **Download diagnostics** (entry menu under **Settings → Devices & services**) gives the entry's configuration, what the integration last fetched and the current state of its entities, with coordinates and credentials redacted — attach it to an issue report when something looks wrong.
 
 ## Data sources
 
