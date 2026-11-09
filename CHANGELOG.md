@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.0 — 2026-11-09
+
+- **Quality scale Bronze.** The integration keeps its coordinator in the config entry's runtime data, the README gained removal instructions and a quality-scale section, and the manifest declares the **bronze** tier. A test suite (VKF state codes, radar status, grid position and slot names, config flow for both sources with serial normalisation, unknown serial, duplicate, reauthentication, coverage check and reconfigure) runs on every push. No change to entities or configuration.
+
 ## 1.4.1 — 2026-11-06
 
 - **Fixed: the diagnostics download could contain private values.** The entry's unique id went out unredacted: depending on the integration it holds the coordinates of the entry or, for a VKF entry of Swiss Hail Protection, the device serial. The text of the last error could also repeat a request URL. The unique id, the entry title and the entry's name and location fields are now redacted, and only the type of the last error is reported. If you have shared a diagnostics file from the previous version, consider it exposed.

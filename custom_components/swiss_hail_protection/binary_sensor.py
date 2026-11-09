@@ -19,7 +19,7 @@ from .localization import t
 async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
-    coordinator: HailCoordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator: HailCoordinator = entry.runtime_data
     async_add_entities([HailAlarmBinarySensor(hass, coordinator, entry)])
 
 

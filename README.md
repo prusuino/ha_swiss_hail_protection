@@ -264,6 +264,16 @@ The VKF asks every installation to run a **function test** before activating the
 
 The VKF source has been verified against a live VKF registration, including this function test: the test alarm switched from the portal turned the binary sensor `on` with the next poll and raised the blinds through an automation, and the sensor returned to `off` once the test alarm was cleared.
 
+## Removal
+
+1. **Settings → Devices & services → Swiss Hail Protection**, open the entry's menu (⋮) and choose **Delete**; repeat for every device and location. The entities, their history and the device go with the entry. A VKF entry's device serial is stored only in that entry and vanishes with it.
+2. If you registered the strategy file as a dashboard resource, remove it under **Settings → Dashboards → Resources** and delete the dashboard built from it.
+3. Remove the integration itself in the **Marketplace** (or HACS), then restart Home Assistant. With a manual installation, delete `custom_components/swiss_hail_protection` instead. Your VKF registration is not affected; the service simply stops seeing polls from this instance.
+
+## Quality scale
+
+The integration declares **Bronze** on the [Home Assistant integration quality scale](https://developers.home-assistant.io/docs/core/integration-quality-scale/): a config flow with tests, unique ids for every entity, brand images, installation and removal instructions, a connection check before an entry is created, no duplicate entries, runtime data on the config entry, and the other Bronze rules. The tier is self-assessed, as it is for every custom integration; the per-rule status, including what is still open for Silver and Gold, is in `custom_components/swiss_hail_protection/quality_scale.yaml`.
+
 ## Notes
 
 - **VKF polling.** The service recalculates the hail forecast every five minutes and requires clients to poll every 120 seconds; the integration polls at exactly that interval, and it is not configurable. The service also caps the number of polls per device and day; the 120-second cadence stays within it with room for a few restarts, and if the cap is ever hit the entities go unavailable until the next accepted poll instead of the integration guessing.

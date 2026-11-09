@@ -23,7 +23,7 @@ from .localization import t
 async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
-    coordinator: HailCoordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator: HailCoordinator = entry.runtime_data
     entities: list[SensorEntity] = [HailStatusSensor(hass, coordinator, entry)]
     if entry_source(entry) == SOURCE_METEOSWISS:
         entities += [
