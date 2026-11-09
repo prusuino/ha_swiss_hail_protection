@@ -104,6 +104,8 @@ The integration ships a **dashboard strategy**: a recipe Home Assistant renders 
 
 The integration deliberately does not create or modify any dashboard on your behalf — your dashboards stay entirely under your own control.
 
+![Dashboard section of a MeteoSwiss hail radar entry, with hail status, season, hail probability, hail size, radar time and the probability graph of the last six hours](docs/dashboard.png)
+
 ### Adding the strategy as a resource
 
 The integration serves the strategy file, but registering it as a Lovelace resource is left to you — the resource list is part of your dashboard configuration, and an integration has no business writing into it. It is a one-time step:
