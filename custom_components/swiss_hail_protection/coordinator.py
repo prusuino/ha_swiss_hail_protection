@@ -49,6 +49,8 @@ from .const import (
     VKF_UPDATE_INTERVAL_SECONDS,
 )
 
+from .issues import IssueReporter
+
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -118,6 +120,7 @@ class HailCoordinator(DataUpdateCoordinator[HailData]):
             update_interval=timedelta(seconds=interval),
         )
         self._entry = entry
+        self.issues = IssueReporter(hass, entry.entry_id)
 
 
 class VkfCoordinator(HailCoordinator):
@@ -144,11 +147,14 @@ class VkfCoordinator(HailCoordinator):
                 "The VKF service does not recognise the configured device serial"
             ) from err
         except HailApiTooManyPollsError as err:
+            self.issues.failure("unreachable", {"host": "meteo.netitservices.com"})
             raise UpdateFailed(
                 "VKF hail-warning service refused the poll: daily quota exhausted"
             ) from err
         except HailApiError as err:
+            self.issues.failure("unreachable", {"host": "meteo.netitservices.com"})
             raise UpdateFailed(f"VKF hail-warning service unreachable: {err}") from err
+        self.issues.clear("unreachable")
 
         if state_code not in STATE_CODE_TO_STATUS and not self._unknown_code_logged:
             self._unknown_code_logged = True
@@ -267,6 +273,8 @@ class MeteoSwissCoordinator(HailCoordinator):
             )
             if poh is None:
                 # Nothing newer than what the entities already show.
+                self.issues.clear("unreachable")
+                self.issues.clear("no_products")
                 return self.data
             col, row = meteoswiss.grid_position(data[CONF_LATITUDE], data[CONF_LONGITUDE])
             evaluation = await self.hass.async_add_executor_job(
@@ -279,9 +287,15 @@ class MeteoSwissCoordinator(HailCoordinator):
                 float(data[CONF_POH_THRESHOLD]),
             )
         except meteoswiss.MeteoSwissNoDataError as err:
+            # Publication gaps happen; a notice only after about an hour of them.
+            self.issues.clear("unreachable")
+            self.issues.failure("no_products", {"host": "data.geo.admin.ch"}, after=12)
             raise MeteoSwissNoCurrentData(f"MeteoSwiss hail radar data unavailable: {err}") from err
         except meteoswiss.MeteoSwissError as err:
+            self.issues.failure("unreachable", {"host": "data.geo.admin.ch"})
             raise UpdateFailed(f"MeteoSwiss hail radar data unavailable: {err}") from err
+        self.issues.clear("unreachable")
+        self.issues.clear("no_products")
 
         self._last_slot = slot
         self._remember_suffixes()

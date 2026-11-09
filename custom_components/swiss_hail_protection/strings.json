@@ -155,5 +155,15 @@
         }
       }
     }
+  },
+  "issues": {
+    "unreachable": {
+      "title": "Swiss Hail Protection: service unreachable",
+      "description": "The service at {host} has not answered for several refreshes in a row. Check your internet connection; if it is fine, the service itself is down. The entities stay unavailable until then and recover on their own; this notice disappears with the next successful refresh."
+    },
+    "no_products": {
+      "title": "Swiss Hail Protection: no hail product for about an hour",
+      "description": "MeteoSwiss at {host} has published no hail radar product for about an hour. Outside the hail season this is normal and the entities simply stay unavailable; in summer it means a publication gap at MeteoSwiss. Nothing to do on your side; this notice disappears with the next product."
+    }
   }
 }

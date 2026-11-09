@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.0 — 2026-11-09
+
+- **Repair notices.** An unreachable VKF or MeteoSwiss service raises a notice under Settings → Repairs after three failed refreshes, a publication gap at MeteoSwiss after about an hour; both withdraw themselves. No change to entities or configuration.
+
 ## 1.5.0 — 2026-11-09
 
 - **Quality scale Bronze.** The integration keeps its coordinator in the config entry's runtime data, the README gained removal instructions and a quality-scale section, and the manifest declares the **bronze** tier. A test suite (VKF state codes, radar status, grid position and slot names, config flow for both sources with serial normalisation, unknown serial, duplicate, reauthentication, coverage check and reconfigure) runs on every push. No change to entities or configuration.

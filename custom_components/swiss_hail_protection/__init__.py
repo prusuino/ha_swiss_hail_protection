@@ -11,6 +11,7 @@ from .const import CONF_DEVICE_ID, DOMAIN, SOURCE_VKF
 from .coordinator import HailCoordinator, MeteoSwissCoordinator, MeteoSwissNoCurrentData, create_coordinator
 from .device import entry_source, entry_title
 from .frontend import async_serve_frontend
+from .issues import async_clear_entry_issues
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -52,4 +53,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: HailConfigEntry) -> bool
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: HailConfigEntry) -> bool:
-    return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+    unloaded = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+    if unloaded:
+        async_clear_entry_issues(hass, entry.entry_id)
+    return unloaded

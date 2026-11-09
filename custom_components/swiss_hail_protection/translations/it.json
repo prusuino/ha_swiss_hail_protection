@@ -155,5 +155,15 @@
         }
       }
     }
+  },
+  "issues": {
+    "unreachable": {
+      "title": "Swiss Hail Protection: servizio non raggiungibile",
+      "description": "Il servizio all'indirizzo {host} non ha risposto per diversi aggiornamenti consecutivi. Controlla la connessione internet; se funziona, è il servizio stesso a essere guasto. Le entità restano non disponibili fino ad allora e si ripristinano da sole; questo avviso scompare con il prossimo aggiornamento riuscito."
+    },
+    "no_products": {
+      "title": "Swiss Hail Protection: nessun prodotto grandine da circa un'ora",
+      "description": "MeteoSvizzera ({host}) non ha pubblicato alcun prodotto radar grandine da circa un'ora. Fuori dalla stagione della grandine è normale e le entità restano semplicemente non disponibili; in estate indica una lacuna di pubblicazione presso MeteoSvizzera. Non devi fare nulla; questo avviso scompare con il prossimo prodotto."
+    }
   }
 }

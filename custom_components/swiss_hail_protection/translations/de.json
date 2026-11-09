@@ -155,5 +155,15 @@
         }
       }
     }
+  },
+  "issues": {
+    "unreachable": {
+      "title": "Swiss Hail Protection: Dienst nicht erreichbar",
+      "description": "Der Dienst unter {host} hat mehrere Aktualisierungen in Folge nicht beantwortet. Prüfe deine Internetverbindung; ist sie in Ordnung, ist der Dienst selbst gestört. Die Entitäten bleiben bis dahin nicht verfügbar und erholen sich von selbst; dieser Hinweis verschwindet mit der nächsten erfolgreichen Aktualisierung."
+    },
+    "no_products": {
+      "title": "Swiss Hail Protection: seit etwa einer Stunde kein Hagelprodukt",
+      "description": "MeteoSchweiz unter {host} hat seit etwa einer Stunde kein Hagelradar-Produkt veröffentlicht. Ausserhalb der Hagelsaison ist das normal und die Entitäten bleiben einfach nicht verfügbar; im Sommer bedeutet es eine Publikationslücke bei MeteoSchweiz. Du musst nichts tun; dieser Hinweis verschwindet mit dem nächsten Produkt."
+    }
   }
 }

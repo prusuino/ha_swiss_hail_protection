@@ -155,5 +155,15 @@
         }
       }
     }
+  },
+  "issues": {
+    "unreachable": {
+      "title": "Swiss Hail Protection : service injoignable",
+      "description": "Le service à l'adresse {host} n'a pas répondu lors de plusieurs actualisations consécutives. Vérifie ta connexion internet ; si elle fonctionne, le service lui-même est en panne. Les entités restent indisponibles jusque-là et se rétablissent d'elles-mêmes ; cet avis disparaît à la prochaine actualisation réussie."
+    },
+    "no_products": {
+      "title": "Swiss Hail Protection : aucun produit grêle depuis environ une heure",
+      "description": "MétéoSuisse ({host}) n'a publié aucun produit radar grêle depuis environ une heure. Hors saison de grêle c'est normal et les entités restent simplement indisponibles ; en été cela signale une lacune de publication chez MétéoSuisse. Rien à faire de ton côté ; cet avis disparaît avec le prochain produit."
+    }
   }
 }
