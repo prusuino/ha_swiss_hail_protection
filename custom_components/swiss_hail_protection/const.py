@@ -1,3 +1,5 @@
+import json
+from pathlib import Path
 """Constants for the Swiss Hail Protection integration."""
 DOMAIN = "swiss_hail_protection"
 
@@ -93,3 +95,7 @@ STATE_CODE_TO_STATUS = {
     STATE_CODE_HAIL: STATUS_HAIL,
     STATE_CODE_TEST_ALARM: STATUS_TEST_ALARM,
 }
+
+# The integration's own version, shown on the service card. Read from the
+# manifest so that a release never needs to touch two places.
+VERSION: str = json.loads((Path(__file__).parent / "manifest.json").read_text(encoding="utf-8"))["version"]

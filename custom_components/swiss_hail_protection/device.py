@@ -13,6 +13,7 @@ from .const import (
     SOURCE_METEOSWISS,
     SOURCE_VKF,
     VKF_ATTRIBUTION,
+    VERSION,
 )
 from .localization import t
 
@@ -71,6 +72,7 @@ def device_info(hass: HomeAssistant, entry: ConfigEntry) -> DeviceInfo:
     if source == SOURCE_METEOSWISS:
         return DeviceInfo(
             identifiers={(DOMAIN, entry.entry_id)},
+            sw_version=VERSION,
             name=entry_title(hass, source, entry.data),
             manufacturer=t("meteoswiss_manufacturer", hass),
             model=t("meteoswiss_model", hass),
@@ -79,6 +81,7 @@ def device_info(hass: HomeAssistant, entry: ConfigEntry) -> DeviceInfo:
         )
     return DeviceInfo(
         identifiers={(DOMAIN, entry.entry_id)},
+        sw_version=VERSION,
         name=entry_title(hass, source, entry.data),
         manufacturer=t("vkf_manufacturer", hass),
         model=t("vkf_model", hass),
