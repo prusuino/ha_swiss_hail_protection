@@ -19,6 +19,17 @@ A Home Assistant custom integration that brings a Swiss hail signal into Home As
 
 Both sources expose the **same alarm binary sensor**, so an automation written for one works unchanged with the other — and you can run both side by side, each as its own entry.
 
+## Highlights
+
+- **Two sources, one alarm**: the VKF hail-warning signal for a registered device or the MeteoSwiss hail radar around any location — both drive the same alarm binary sensor.
+- **VKF signal**: about 20 minutes of lead time, all year, polled every 120 seconds as the service requires; the status sensor tells a test alarm from a real one.
+- **MeteoSwiss radar**: no registration; probability of hail and expected hail size on a 1 km grid, April to September, with a radius and an alarm threshold you set.
+- **Blinds up, then back**: the blueprint raises the blinds on an alarm, remembers their positions and restores them after a hold time.
+- **Built for the automation editor**: triggers (hail alarm started, hail alarm cleared, VKF test alarm started) and conditions (hail alarm is / is not active) — no templates needed.
+- **A dashboard without building one**: the bundled strategy shows every entry by itself.
+- **Never a stale value**: all entities go unavailable while the service is unreachable or has published nothing for 20 minutes, and a repair notice tells you.
+- **Set up in a minute**: serial and interface id for the VKF signal, or a radius around your Home Assistant location for the radar; German, English, French and Italian; diagnostics download with serial and coordinates redacted.
+
 ## Background
 
 Hail is the single most expensive natural hazard for buildings in Switzerland, and most of the damage is to blinds and shutters. The cantonal building insurers therefore run **«Hagelschutz – einfach automatisch»**, developed with SRF Meteo: a nowcast predicts hail cells for every registered building, and a warning signal tells the building to raise its blinds in time. When the danger has passed, the signal is cleared and the blinds may return to their previous position. Traditionally the signal reaches the building through a **VKF signal box**, a small device with a relay that the blind controller is wired to. Building control systems that can talk HTTP do not need the box: the VKF documents a **REST interface** that delivers the same signal, and that is what the VKF source of this integration polls.
