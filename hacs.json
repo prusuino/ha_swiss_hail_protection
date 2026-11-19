@@ -1,5 +1,6 @@
 {
   "name": "Swiss Hail Protection (VKF / MeteoSwiss)",
+  "country": "CH",
   "zip_release": true,
   "filename": "swiss_hail_protection.zip",
   "render_readme": true,

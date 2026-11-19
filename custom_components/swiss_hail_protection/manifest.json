@@ -1,6 +1,7 @@
 {
   "domain": "swiss_hail_protection",
   "name": "Swiss Hail Protection (VKF / MeteoSwiss)",
+  "categories": ["weather_alerts.public_warnings", "blinds_curtains"],
   "codeowners": ["@prusuino"],
   "config_flow": true,
   "dependencies": ["http"],
@@ -10,5 +11,5 @@
   "issue_tracker": "https://github.com/prusuino/ha_swiss_hail_protection/issues",
   "quality_scale": "bronze",
   "requirements": ["pyfive==1.2.1"],
-  "version": "1.6.0"
+  "version": "1.6.1"
 }
