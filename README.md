@@ -215,8 +215,8 @@ On Home Assistant 2026.10 or newer the integration adds its own entries to the a
 
 | Trigger | Fires when |
 |---|---|
-| **Hail alarm started** | an alarm entity switches on – real warning or VKF test alarm, from either source |
-| **Hail alarm cleared** | an alarm entity switches off |
+| **Hail alarm started** | an alarm entity switches on – real warning or VKF test alarm, from either source. Also when the alarm began while the source could not be reached; an alarm that was already on before such an outage does not fire again |
+| **Hail alarm cleared** | an alarm entity switches off – after an outage only when it was on before |
 | **VKF test alarm started** | the status entity switches to *test alarm* (function test); the hail alarm switches on as well, so use this only to word a notification differently |
 
 On 2026.11 or newer there are also two conditions, **Hail alarm is active** and **Hail alarm is not active**, for the other blind automations that should stand back while a warning is on. Each trigger and condition targets the integration's own entities (pick an entity, a device or an area); the usual *for* duration and *trigger when* / *condition passes if* behaviour options apply.

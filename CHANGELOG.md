@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.2 — 2026-11-23
+
+- **Fixed: a hail alarm that began during an outage did not fire the trigger.** While a source cannot be reached the alarm entity is unavailable, and Home Assistant ignores every change out of "unavailable". An alarm that began in that time switched the entity from unavailable to on, and *Hail alarm started* stayed silent; *Hail alarm cleared* and *VKF test alarm started* had the same gap. The triggers now compare with the state before the outage: a new alarm fires, one that was already on does not fire a second time, and *cleared* fires only when there was an alarm before. An automation that uses a plain state trigger on the alarm entity is not affected either way.
+- Tests for the triggers with real automations.
+
 ## 1.6.1 — 2026-11-19
 
 - The Home Assistant Marketplace lists the integration under *Weather & alerts → Public warnings* and *Blinds & curtains*. The repository is marked as made for Switzerland. Nothing changes in how the integration works.

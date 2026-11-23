@@ -17,7 +17,7 @@ from homeassistant.components.binary_sensor import (
     BinarySensorDeviceClass,
 )
 from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN, SensorDeviceClass
-from homeassistant.const import STATE_OFF, STATE_ON
+from homeassistant.const import STATE_OFF, STATE_ON, STATE_UNAVAILABLE, STATE_UNKNOWN
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
 
@@ -46,20 +46,66 @@ else:
             and entry.platform == DOMAIN
         }
 
-    class _AlarmStarted(make_entity_target_state_trigger(ALARM_DOMAIN_SPECS, STATE_ON)):
-        """The alarm entity switches to on (real warning or test alarm)."""
+    _GAP = (STATE_UNAVAILABLE, STATE_UNKNOWN)
+
+    class _AcrossGaps:
+        """Lets a target-state trigger see a change that follows a gap.
+
+        The core skips every change out of "unavailable" or "unknown". While
+        the source cannot be reached the entities are unavailable, so
+        whatever began during the outage would switch an entity from
+        unavailable straight to its new state, and the core would not fire.
+        Such a change is let through here and judged against the last state
+        seen before the gap: it fires when that state was not already the
+        target. With nothing known from before the gap, a trigger that
+        announces something (`_fire_without_history`) fires, the others
+        stay quiet. The core asks is_valid_state for every state with a
+        value and only then is_valid_transition, so the states are
+        remembered there.
+        """
+
+        _excluded_from_states = frozenset()
+        _fire_without_history = False
+
+        def __init__(self, hass: HomeAssistant, config) -> None:
+            super().__init__(hass, config)
+            self._last_state: dict[str, str] = {}
+            self._previous_state: dict[str, str | None] = {}
+
+        def is_valid_state(self, state, report_not_triggered) -> bool:
+            self._previous_state[state.entity_id] = self._last_state.get(state.entity_id)
+            self._last_state[state.entity_id] = state.state
+            return super().is_valid_state(state, report_not_triggered)
+
+        def is_valid_transition(self, from_state, to_state) -> bool:
+            if from_state.state not in _GAP:
+                return super().is_valid_transition(from_state, to_state)
+            before = self._previous_state.get(to_state.entity_id)
+            if before is None:
+                return self._fire_without_history
+            return before not in self._to_states
+
+    class _AlarmStarted(_AcrossGaps, make_entity_target_state_trigger(ALARM_DOMAIN_SPECS, STATE_ON)):
+        """The alarm entity switches to on (real warning or test alarm).
+
+        After an outage it fires unless the alarm was already on before it;
+        with nothing known from before it fires, because a hail alarm is worth
+        one notification too many rather than one too few."""
+
+        _fire_without_history = True
 
         def entity_filter(self, entities: set[str]) -> set[str]:
             return _own_entities(self._hass, super().entity_filter(entities))
 
-    class _AlarmCleared(make_entity_target_state_trigger(ALARM_DOMAIN_SPECS, STATE_OFF)):
-        """The alarm entity switches to off."""
+    class _AlarmCleared(_AcrossGaps, make_entity_target_state_trigger(ALARM_DOMAIN_SPECS, STATE_OFF)):
+        """The alarm entity switches to off; after an outage only when it was on
+        before it."""
 
         def entity_filter(self, entities: set[str]) -> set[str]:
             return _own_entities(self._hass, super().entity_filter(entities))
 
     class _TestAlarmStarted(
-        make_entity_target_state_trigger(STATUS_DOMAIN_SPECS, STATUS_TEST_ALARM)
+        _AcrossGaps, make_entity_target_state_trigger(STATUS_DOMAIN_SPECS, STATUS_TEST_ALARM)
     ):
         """The status entity switches to test_alarm (VKF function test)."""
 
